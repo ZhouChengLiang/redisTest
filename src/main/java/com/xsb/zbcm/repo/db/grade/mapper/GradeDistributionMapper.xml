@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsb.zbcm.repo.db.grade.impl.GradeDistributionMapper">
+  <resultMap id="BaseResultMap" type="com.xsb.zbcm.repo.db.grade.entity.GradeDistribution">
+    <result column="curdate" jdbcType="VARCHAR" property="curdate" />
+    <result column="curgrade" jdbcType="INTEGER" property="curgrade" />
+    <result column="curexp" jdbcType="INTEGER" property="curexp" />
+    <result column="curusers" jdbcType="INTEGER" property="curusers" />
+    <result column="curtime" jdbcType="TIMESTAMP" property="curtime" />
+    <result column="county_code" jdbcType="INTEGER" property="countyCode" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xsb.zbcm.repo.db.grade.entity.GradeDistribution">
+    insert into grade_distribution (curdate, curgrade, curexp, 
+      curusers, curtime, county_code
+      )
+    values (#{curdate,jdbcType=VARCHAR}, #{curgrade,jdbcType=INTEGER}, #{curexp,jdbcType=INTEGER}, 
+      #{curusers,jdbcType=INTEGER}, #{curtime,jdbcType=TIMESTAMP}, #{countyCode,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsb.zbcm.repo.db.grade.entity.GradeDistribution">
+    insert into grade_distribution
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="curdate != null">
+        curdate,
+      </if>
+      <if test="curgrade != null">
+        curgrade,
+      </if>
+      <if test="curexp != null">
+        curexp,
+      </if>
+      <if test="curusers != null">
+        curusers,
+      </if>
+      <if test="curtime != null">
+        curtime,
+      </if>
+      <if test="countyCode != null">
+        county_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="curdate != null">
+        #{curdate,jdbcType=VARCHAR},
+      </if>
+      <if test="curgrade != null">
+        #{curgrade,jdbcType=INTEGER},
+      </if>
+      <if test="curexp != null">
+        #{curexp,jdbcType=INTEGER},
+      </if>
+      <if test="curusers != null">
+        #{curusers,jdbcType=INTEGER},
+      </if>
+      <if test="curtime != null">
+        #{curtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="countyCode != null">
+        #{countyCode,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

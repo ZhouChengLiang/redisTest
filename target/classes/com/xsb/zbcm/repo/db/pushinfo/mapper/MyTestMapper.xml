@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xsb.zbcm.repo.db.pushinfo.impl.MyTestMapper">
+  <resultMap id="BaseResultMap" type="com.xsb.zbcm.repo.db.pushinfo.entity.MyTest">
+    <result column="jsonStr" jdbcType="VARCHAR" property="jsonstr" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xsb.zbcm.repo.db.pushinfo.entity.MyTest">
+    insert into mytest (jsonStr)
+    values (#{jsonstr,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xsb.zbcm.repo.db.pushinfo.entity.MyTest">
+    insert into mytest
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jsonstr != null">
+        jsonStr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jsonstr != null">
+        #{jsonstr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
