@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
@@ -64,6 +65,9 @@ public class TestRelationGradeUser {
 	
 	@Test
 	public void test18(){
+		LocalDate now = LocalDate.now();
+		System.out.println(now.withDayOfWeek(1).toDate());
+		System.out.println(now.toDate());
 	}
 	
 	@Test
