@@ -62,6 +62,12 @@ public class TestRelationGradeUser {
 			new GradeDistribution("10.27",3,300,2,10),new GradeDistribution("10.27",4,600,0,10),
 			new GradeDistribution("10.27",5,900,0,10)
 			);
+	@Test
+	public void test19(){
+		LocalDate localDate = LocalDate.now();
+		System.out.println(localDate.getWeekOfWeekyear());
+		System.out.println(localDate.getWeekyear());
+	}
 	
 	@Test
 	public void test18(){
