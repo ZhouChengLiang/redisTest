@@ -62,18 +62,41 @@ public class TestRelationGradeUser {
 			new GradeDistribution("10.27",3,300,2,10),new GradeDistribution("10.27",4,600,0,10),
 			new GradeDistribution("10.27",5,900,0,10)
 			);
+	
+	@Test
+	public void test20(){
+		System.out.println(System.currentTimeMillis());
+		
+	}
+	
 	@Test
 	public void test19(){
 		LocalDate localDate = LocalDate.now();
+		System.out.println(localDate.getDayOfWeek());
 		System.out.println(localDate.getWeekOfWeekyear());
 		System.out.println(localDate.getWeekyear());
+		
+		System.out.println(localDate.plusWeeks(3));
+		
+		System.out.println(localDate.plusWeeks(3).getWeekOfWeekyear());
+		System.out.println(localDate.plusWeeks(3).getWeekyear());
+		
+		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3));
+		
+		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3).getWeekOfWeekyear());
+		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3).getWeekyear());
+		
 	}
 	
 	@Test
 	public void test18(){
 		LocalDate now = LocalDate.now();
-		System.out.println(now.withDayOfWeek(1).toDate());
-		System.out.println(now.toDate());
+		System.out.println("此时的第一天>>>>>>>"+DateFormatUtils.format(now.withDayOfWeek(1).toDate(), "yyyy-MM-dd")+" :"+now.withDayOfWeek(1).toDate());
+		LocalDate next = now.plusDays(3);
+		System.out.println("三天之后的时间>>>>>"+DateFormatUtils.format(next.toDate(), "yyyy-MM-dd"));
+		
+		System.out.println("三天之后那时的第一天>>>>>>>"+DateFormatUtils.format(next.withDayOfWeek(1).toDate(), "yyyy-MM-dd"));
+		
 	}
 	
 	@Test
@@ -90,6 +113,7 @@ public class TestRelationGradeUser {
 		System.out.println(DateFormatUtils.ISO_TIME_TIME_ZONE_FORMAT.toString());
 		System.out.println(DateFormatUtils.SMTP_DATETIME_FORMAT.toString());
 	}
+	
 	@Test
 	public void test16(){
 		System.out.println(Integer.valueOf(null));

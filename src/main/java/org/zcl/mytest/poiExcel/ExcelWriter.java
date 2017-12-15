@@ -1,14 +1,21 @@
 package org.zcl.mytest.poiExcel;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -41,12 +48,18 @@ public class ExcelWriter {
 	
 //	private  static   short  XLS_ENCODING  =  HSSFWorkbook.ENCODING_UTF_16;
 	
+	/**
+	 * FIXME
+	 * @param name
+	 */
 	public void addWorkSheet(String name){
 		if (emptyStringValue(name)) throw new IllegalArgumentException("工作表名称不能为空");
 		if (getWorkBook().getSheet(name)!=null){
 			throw new IllegalArgumentException("["+name+"]工作表已经存在");
 		}else{
-			getWorkBook().createSheet(name);
+			HSSFSheet sheet = getWorkBook().createSheet(name);
+			sheet.setDefaultColumnWidth(20);  
+			sheet.setDefaultRowHeightInPoints(20);  
 			currentSheetName=name;
 			this.sheetCount++;
 		}
@@ -89,6 +102,23 @@ public class ExcelWriter {
 		cell.setCellStyle(style);
 		setSheetSize(currentSheetName,row,column);
 		return constructCellConstraints(row,column);
+	}
+	/**
+	 * HSSFClientAnchor(int dx1,int dy1,int dx2,int dy2,short col1,int row1,short col2, int row2)
+	 * 	dx1：the x coordinate within the first cell。
+		dy1：the y coordinate within the first cell。
+		dx2：the x coordinate within the second cell。
+		dy2：the y coordinate within the second cell。
+		col1：the column (0 based) of the first cell。
+		row1：the row (0 based) of the first cell。
+		col2：the column (0 based) of the second cell。
+		row2：the row (0 based) of the second cell。
+	 */
+	public void addPicCell(byte[] buf,short col1,int row1,short col2, int row2){
+		HSSFPatriarch patriarch = getCurrentWorksheet().createDrawingPatriarch();
+		HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 0, 0,  col1, row1, col2, row2);
+		anchor.setAnchorType(3);
+		patriarch.createPicture(anchor, getWorkBook().addPicture(buf, HSSFWorkbook.PICTURE_TYPE_JPEG));
 	}
 	
 	public CellConstraints addCell(int row,int column,long value){
@@ -158,8 +188,9 @@ public class ExcelWriter {
 		return file;
 	}
 	private File createStoreFile(String fileName) throws Exception {
-		File storedFile = new File("WebRoot" + File.separator 
-				+ createStoreFilePath() + File.separator+ fileName);
+		/*File storedFile = new File("WebRoot" + File.separator 
+				+ createStoreFilePath() + File.separator+ fileName);*/
+		File storedFile = new File(fileName);
 		if (!storedFile.exists()) {
 			storedFile.createNewFile();
 		}
@@ -254,7 +285,11 @@ public class ExcelWriter {
 		HSSFCell cell=rowData.getCell(column);
 		return cell!=null;
 	}
-	
+	/**
+	 * FIXME
+	 * @param row
+	 * @return
+	 */
 	private HSSFRow getRow(int row){
 		HSSFRow result=getCurrentWorksheet().getRow(row);
 		if (result==null){
@@ -326,16 +361,16 @@ public class ExcelWriter {
 	public static void main(String[] arg) throws Exception{
 		ExcelWriter write=new ExcelWriter();
 		write.setDefaultCellBorder(true);
-		write.addWorkSheet("测试1");
+		/*		write.addWorkSheet("测试1");
 		write.addCell(0, 0, "ceshi shuju").setFont("宋体", 20, true, true,true,true);
-//		write.addCell(0, 1, Calendar.getInstance().getTime());
-//		write.addCell(0, 2, (Integer)null,ExcelWriter.DEFAULT_LONG_FORMAT);
+		write.addCell(0, 1, Calendar.getInstance().getTime());
+		write.addCell(0, 2, (Integer)null,ExcelWriter.DEFAULT_LONG_FORMAT);
 		write.addCell(0, 2, (Boolean)null);
 		write.addCell(0, 3, 1234567890.98765);
 		write.addCell(0, 4, true);
 		write.addCell(0, 5, Boolean.FALSE);
 		write.addCell(1, 0, "ceshi shuju").setFont("宋体", 10, false, true,true,true);
-//		write.addCell(2, 1, Calendar.getInstance().getTime());
+		write.addCell(2, 1, Calendar.getInstance().getTime());
 		write.addCell(3, 2, -1234567L);
 		write.addCell(4, 3, 1234567890.98765).setBorder(true);
 		write.addCell(4, 4, false);
@@ -343,10 +378,19 @@ public class ExcelWriter {
 		write.addCell(5, 1, -1234567L).setBorder(true).mergeTo(6,1).setBorder(false);
 		write.addCell(5, 2, 1234567890.98765,"#,##0.0000").setBorder(true).mergeTo(6,2);
 		write.addCell(5, 3, false).mergeTo(6,3);
-		write.addCell(8, 1, "aaaaaaa");
+		write.addCell(8, 1, "aaaaaaa");*/
 		write.addWorkSheet("测试2");
 		write.addCell(0, 0, "ceshi shuju");
-//		write.addCell(0, 1, Calendar.getInstance().getTime());
+		ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+		BufferedImage bufferImg = ImageIO.read(new File("B.jpg"));
+		ImageIO.write(bufferImg, "jpg", byteArrayOut);
+		/*write.addPicCell(byteArrayOut.toByteArray(),(short)1,0,(short)2,1);
+		write.addPicCell(byteArrayOut.toByteArray(),(short)1,1,(short)2,2);
+		write.addPicCell(byteArrayOut.toByteArray(),(short)1,2,(short)2,3);*/
+		write.addPicCell(byteArrayOut.toByteArray(),(short)3,1,(short)4,2);
+		write.addPicCell(byteArrayOut.toByteArray(),(short)3,2,(short)4,3);
+		write.addPicCell(byteArrayOut.toByteArray(),(short)3,3,(short)4,4);
+		write.addCell(0, 1, Calendar.getInstance().getTime());
 		write.addCell(0, 2, 1234567L);
 		write.addCell(0, 3, 1234567890.98765);
 		write.getExcelFile("test.xls");

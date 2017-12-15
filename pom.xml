@@ -108,6 +108,17 @@
 			<artifactId>mybatis</artifactId>
 			<version>3.4.1</version>
 		</dependency>
+		<dependency>
+            <groupId>com.alibaba.otter</groupId>
+            <artifactId>canal.client</artifactId>
+            <version>1.0.24</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 	</dependencies>
 	<profiles>
         <profile>
