@@ -1,5 +1,6 @@
 package org.zcl.canal;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
 import com.alibaba.otter.canal.client.CanalConnector;
@@ -16,11 +17,11 @@ public class SimpleCanalClientExample {
 
 	public static void main(String args[]) {
 		// 创建链接
-		/*CanalConnector connector = CanalConnectors
-				.newSingleConnector(new InetSocketAddress("106.14.165.155", 2181), "example", "", "");*/
-		CanalConnector connector = CanalConnectors.newClusterConnector("106.14.165.155:2181", "example", "", "");
+		CanalConnector connector = CanalConnectors
+				.newSingleConnector(new InetSocketAddress("106.14.165.155", 11111), "example", "", "");
 		
-//		CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress("106.14.165.155", 2181), "example", "", "");
+/*		CanalConnector connector = CanalConnectors.newClusterConnector("106.14.165.155:2181", "example", "", "");
+*/		
 		int batchSize = 1000;
 		int emptyCount = 0;
 		try {

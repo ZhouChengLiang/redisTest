@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.gexin.fastjson.JSON;
+import com.alibaba.fastjson.JSON;
 
 public class ReturnResult {
 	private String date;

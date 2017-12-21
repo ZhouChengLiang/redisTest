@@ -2,6 +2,7 @@ package org.zcl.mytest;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -62,6 +63,18 @@ public class TestRelationGradeUser {
 			new GradeDistribution("10.27",3,300,2,10),new GradeDistribution("10.27",4,600,0,10),
 			new GradeDistribution("10.27",5,900,0,10)
 			);
+	
+	@Test
+	public void test21(){
+		Instant st = Instant.now();
+		Date curtime = new Date();
+		DateFormatUtils.format(curtime, "yyyyMMdd");
+		System.out.println("It costs>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+Duration.between(st, Instant.now()));
+		st = Instant.now();
+		java.time.LocalDate local = java.time.LocalDate.now();
+		local.format(DateTimeFormatter.BASIC_ISO_DATE);
+		System.out.println("It costs>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+Duration.between(st, Instant.now()));
+	}
 	
 	@Test
 	public void test20(){

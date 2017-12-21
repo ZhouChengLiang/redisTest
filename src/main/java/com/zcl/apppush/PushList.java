@@ -1,15 +1,6 @@
 package com.zcl.apppush;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.gexin.rp.sdk.base.IPushResult;
-import com.gexin.rp.sdk.base.impl.ListMessage;
-import com.gexin.rp.sdk.base.impl.Target;
-import com.gexin.rp.sdk.http.IGtPush;
-import com.gexin.rp.sdk.template.NotificationTemplate;
-import com.gexin.rp.sdk.template.style.Style0;
-public class PushList {
+public class PushList {/*
     //采用"Java SDK 快速入门"， "第二步 获取访问凭证 "中获得的应用配置，用户可以自行替换
     private static String appId = "LSvf80ZjBU692LTThtlxF1";
     private static String appKey = "cYKuNdCAGh6FgP9kmDxEr1";
@@ -77,4 +68,4 @@ public class PushList {
         template.setTransmissionContent("没什么内容");
         return template;
     }
-}
+*/}

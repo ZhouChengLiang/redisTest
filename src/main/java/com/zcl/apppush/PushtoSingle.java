@@ -1,14 +1,6 @@
 package com.zcl.apppush;
 
-import com.gexin.rp.sdk.base.IPushResult;
-import com.gexin.rp.sdk.base.impl.SingleMessage;
-import com.gexin.rp.sdk.base.impl.Target;
-import com.gexin.rp.sdk.exceptions.RequestException;
-import com.gexin.rp.sdk.http.IGtPush;
-import com.gexin.rp.sdk.template.LinkTemplate;
-import com.gexin.rp.sdk.template.style.Style0;
-
-public class PushtoSingle {
+public class PushtoSingle {/*
 	 //采用"Java SDK 快速入门"， "第二步 获取访问凭证 "中获得的应用配置，用户可以自行替换
     private static String appId = "LSvf80ZjBU692LTThtlxF1";
     private static String appKey = "cYKuNdCAGh6FgP9kmDxEr1";
@@ -71,4 +63,4 @@ public class PushtoSingle {
         template.setUrl("http://www.baidu.com");
         return template;
     }
-}
+*/}
