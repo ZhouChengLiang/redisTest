@@ -63,6 +63,110 @@ public class TestRelationGradeUser {
 			new GradeDistribution("10.27",3,300,2,10),new GradeDistribution("10.27",4,600,0,10),
 			new GradeDistribution("10.27",5,900,0,10)
 			);
+	/**
+	 * String date,Integer grantScores,Integer signedScores,Integer growthScores;
+ 	   Integer dailyScores,Integer bonusScores,Integer consumedScores,Integer busiScores;
+ 	   Integer deducteScores,Integer countyCode;
+	 */
+	List<ScoreStatisticsExtension> list = Arrays.asList(
+				new ScoreStatisticsExtension("2017-12-26",14L,11L,1L,1L,1L,5L,4L,1L,10),
+				new ScoreStatisticsExtension("2017-12-25",4L,1L,1L,1L,1L,3L,1L,1L,10),
+				new ScoreStatisticsExtension("2017-12-24",6L,1L,2L,2L,1L,1L,1L,0L,10),
+				new ScoreStatisticsExtension("2017-12-23",1L,0L,0L,0L,1L,0L,0L,0L,10),
+				new ScoreStatisticsExtension("2017-12-22",3L,1L,2L,0L,0L,8L,1L,7L,10)
+			);
+	List<TemporaryStatisticsExtension> last = Arrays.asList(
+				new TemporaryStatisticsExtension("2017-12-27","积分增加",0,1L,10),
+				new TemporaryStatisticsExtension("2017-12-27","签到",3,40L,10),
+				new TemporaryStatisticsExtension("2017-12-26","签到",3,20L,10),
+				new TemporaryStatisticsExtension("2017-12-25","签到",3,60L,10),
+				new TemporaryStatisticsExtension("2017-12-22","签到",3,20L,10),
+				new TemporaryStatisticsExtension("2017-11-17","签到",3,20L,10),
+				new TemporaryStatisticsExtension("2017-11-16","签到",3,64L,10),
+				new TemporaryStatisticsExtension("2017-11-15","积分减少",0,-1L,10),
+				new TemporaryStatisticsExtension("2017-11-15","积分增加",0,6L,10),
+				new TemporaryStatisticsExtension("2017-11-15","签到",3,0L,10)
+			);
+	
+	
+	
+	@Test
+	public void test25(){
+		List<ScoreStatisticsExtension> result = new ArrayList<>();
+		Map<String,List<TemporaryStatisticsExtension>> firstMap = 
+				last.stream().collect(Collectors.groupingBy(TemporaryStatisticsExtension::getDate));
+		for(Map.Entry<String, List<TemporaryStatisticsExtension>> firstEntry: firstMap.entrySet()){
+			ScoreStatisticsExtension single = new ScoreStatisticsExtension();
+			single.setDate(firstEntry.getKey());
+			List<TemporaryStatisticsExtension> list = firstEntry.getValue();
+			Map<Boolean, List<TemporaryStatisticsExtension>> secondMap = list.stream().collect(Collectors.partitioningBy((e)->e.getEventType()>0));
+			for(Map.Entry<Boolean, List<TemporaryStatisticsExtension>> secondEntry:secondMap.entrySet()){
+				if(secondEntry.getKey()){
+					List<TemporaryStatisticsExtension> trueList = secondEntry.getValue();
+					Long dailyScores = trueList.stream().filter((e)->Objects.equals(e.getEventType(),1)).map(TemporaryStatisticsExtension::getPartScore).reduce(Long::sum).orElse(0L);
+					Long growthScores = trueList.stream().filter((e)->Objects.equals(e.getEventType(),2)).map(TemporaryStatisticsExtension::getPartScore).reduce(Long::sum).orElse(0L);
+					Long signedScores = trueList.stream().filter((e)->Objects.equals(e.getEventType(),3)).map(TemporaryStatisticsExtension::getPartScore).reduce(Long::sum).orElse(0L);
+					single.setDailyScores(dailyScores);
+					single.setGrowthScores(growthScores);
+					single.setSignedScores(signedScores);
+				}else{
+					List<TemporaryStatisticsExtension> falseList = secondEntry.getValue();
+					Long bonusScores = falseList.stream().filter((e)->Objects.equals(EventEnum.ADD_INT,EventEnum.getByEvent(e.getEvent()))).map(TemporaryStatisticsExtension::getPartScore).reduce(Long::sum).orElse(0L);
+					Long busiScores = falseList.stream().filter((e)->Objects.equals(EventEnum.SHOPPING,EventEnum.getByEvent(e.getEvent()))).map(TemporaryStatisticsExtension::getPartScore).reduce(Long::sum).orElse(0L);
+					Long deducteScores = falseList.stream().filter((e)->Objects.equals(EventEnum.SUB_INT,EventEnum.getByEvent(e.getEvent()))).map(TemporaryStatisticsExtension::getPartScore).reduce(Long::sum).orElse(0L);
+					single.setBonusScores(bonusScores);
+					single.setBusiScores(-busiScores);
+					single.setDeducteScores(-deducteScores);
+				}
+			}
+			single.setGrantScores(Long.sum(single.getSignedScores()+single.getDailyScores(),single.getGrowthScores()+single.getBonusScores()));
+			single.setConsumedScores(Long.sum(single.getBusiScores(), single.getDeducteScores()));
+			result.add(single);
+		}
+		result.sort((x,y)->y.getDate().compareTo(x.getDate()));
+	}
+	
+	@Test
+	public void test24(){
+		LocalDate localDate = LocalDate.now();
+		String date = "2017-12-25";
+		System.out.println(LocalDate.parse(date));
+		System.out.println(localDate.withDayOfWeek(1));
+	}
+	
+	@Test
+	public void test23(){
+		Map<String,Object> result = new HashMap<>();
+		result.put("curgrantScores", 0);
+		result.put("curconsumedScores", 0);
+		result.put("tobeconsumedScores", 0);
+		
+		LocalDate localDate = LocalDate.now();
+		list.stream().forEach((obj)->{
+			if(Objects.equals(obj.getDate(), localDate.toString("yyyy-MM-dd"))){
+				result.put("curgrantScores", obj.getGrantScores());
+				result.put("curconsumedScores", obj.getConsumedScores());
+			}
+		});
+		Long grantScores = list.stream().collect(Collectors.summarizingLong(ScoreStatisticsExtension::getGrantScores)).getSum();
+		Long consumedScores = list.stream().collect(Collectors.summarizingLong(ScoreStatisticsExtension::getConsumedScores)).getSum();
+		
+		/*Long grantScores = list.stream().map(ScoreStatisticsExtension::getGrantScores).reduce(Long::sum).ofNullable(0L).get();
+		Long consumedScores = list.stream().map(ScoreStatisticsExtension::getConsumedScores).reduce(Long::sum).ofNullable(0L).get();*/
+		result.put("tobeconsumedScores", Long.sum(grantScores, -consumedScores));
+		Long weekgrantScores = list.stream().filter((obj)->!LocalDate.parse(obj.getDate()).isBefore(localDate.withDayOfWeek(1))).map(ScoreStatisticsExtension::getGrantScores).reduce(Long::sum).orElse(0L);
+		result.put("weekgrantScores", weekgrantScores);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void test22(){
+		String str1 = "abc";
+		String str2 = "def";
+		System.out.println(str1.concat(str2));
+		System.out.println(String.join("/", str1,str2));
+		System.out.println(String.join("/", null,str2));
+	}
 	
 	@Test
 	public void test21(){
@@ -85,7 +189,8 @@ public class TestRelationGradeUser {
 	@Test
 	public void test19(){
 		LocalDate localDate = LocalDate.now();
-		System.out.println(localDate.getDayOfWeek());
+		
+		/*System.out.println(localDate.getDayOfWeek());
 		System.out.println(localDate.getWeekOfWeekyear());
 		System.out.println(localDate.getWeekyear());
 		
@@ -97,7 +202,9 @@ public class TestRelationGradeUser {
 		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3));
 		
 		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3).getWeekOfWeekyear());
-		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3).getWeekyear());
+		System.out.println(localDate.withDayOfWeek(1).plusWeeks(3).getWeekyear());*/
+		
+		System.out.println(localDate.withDayOfWeek(1).toDate());
 		
 	}
 	
