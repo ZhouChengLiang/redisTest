@@ -1,9 +1,6 @@
 package org.zcl.juc;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TestCopyOnWriteArrayList {
@@ -17,7 +14,6 @@ public class TestCopyOnWriteArrayList {
 }
 
 class HelloThread implements Runnable{
-	
 //	private static List<String> list = Collections.synchronizedList(new ArrayList<>());
 	
 	private static CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>();

@@ -14,13 +14,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class TestReadWriteLock {
 	public static void main(String[] args) {
 		ReadWriteLockDemo rw = new ReadWriteLockDemo();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				rw.set((int) (Math.random()*101));
-			}
-		},"Write").start();
+		for(int i = 0;i<10;i++){
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					rw.set((int) (Math.random()*101));
+				}
+			},"Write_"+i).start();
+		}
+		
 		
 		for(int i = 0;i<10;i++){
 			new Thread(new Runnable() {
@@ -29,7 +32,7 @@ public class TestReadWriteLock {
 				public void run() {
 					rw.get();
 				}
-			},"Read").start();
+			},"Read_"+i).start();
 		}
 	}
 }
@@ -52,7 +55,7 @@ class ReadWriteLockDemo{
 	public void set(int number){
 		lock.writeLock().lock();
 		try {
-			System.out.println(Thread.currentThread().getName());
+			System.out.println(Thread.currentThread().getName()+" : "+number);
 			this.number = number;
 		} finally {
 			lock.writeLock().unlock();

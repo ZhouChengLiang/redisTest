@@ -1,5 +1,6 @@
 package org.zcl.mytest;
 
+import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -8,10 +9,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -22,8 +26,11 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
+import com.google.common.hash.Hashing;
 
 public class TestRelationGradeUser {
+	private static final String SIGNATURE_SALT = "XG?4VZ&4>9w";
 	List<GradeInfo> gradeInfos = Arrays.asList(
 						new GradeInfo(1,1,0,0,"打个酱油","1.jpg",0,10),new GradeInfo(2,2,60,0,"吃瓜群众","2.jpg",0,10),
 						new GradeInfo(3,3,300,0,"闲散小生","3.jpg",0,10),new GradeInfo(4,4,600,0,"江湖小虾","4.jpg",0,10),
@@ -88,7 +95,71 @@ public class TestRelationGradeUser {
 				new TemporaryStatisticsExtension("2017-11-15","签到",3,0L,10)
 			);
 	
+	@Test
+	public void test28(){
+		List<String> list = new ArrayList<>();
+		list.add("A");
+		list.add("B");
+		list.add("C");
+		list.add("D");
+		list.add("E");
+		list.parallelStream();
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>");
+			}
+		});
+	}
 	
+	@Test
+	public void test27(){
+		Map<String,String> map = new HashMap<>();
+		map.put("/api/article/rank_list", "");
+		map.put("/api/about/detail", "");
+		map.put("/api/article/rank_list_pc", "");
+		map.put("/api/article/channel_list", "");
+		map.put("/api/article/live_list", "");
+		map.put("/api/article/search", "");
+		map.put("/api/article/notice_list", "");
+		map.put("/api/article/discovery_list", "");
+		map.put("/api/article/notice_focus_list", "");
+		map.put("/api/article/activity_list", "");
+		map.put("/api/article/activity_filter_list", "");
+		map.put("/api/article/subject_group_list", "");
+		map.put("/api/article/detail_pc", "");
+		map.put("/api/article/detail_share", "");
+//		String uri = "/api/about/detail" ;
+		String sessionId = "5a9cf4c29c880e195cc85957";
+	    String requestId = "1";
+		String timestamp = "2";
+//		String rawSignatureString = String.format("%s&&%s&&%s&&%s&&%s", uri, Strings.nullToEmpty(sessionId), requestId, timestamp, SIGNATURE_SALT);
+//		System.out.println(Hashing.sha256().hashString(rawSignatureString, Charset.forName("UTF-8")).toString());
+		map.forEach((k,v)->{
+			String abc = String.format("%s&&%s&&%s&&%s&&%s", k, Strings.nullToEmpty(sessionId), requestId, timestamp, SIGNATURE_SALT);
+			map.put(k, (Hashing.sha256().hashString(abc, Charset.forName("UTF-8")).toString()));
+		});
+		map.forEach((k,v)->System.out.println(k+">>>>>>>>>>>>>"+v));
+	}
+	
+	@Test
+	public void test26(){
+		Set<String> set = new HashSet<>();
+		
+		Map<String,String> map = new Hashtable<>();
+		
+		map = new TreeMap<>();
+		
+		map = new HashMap<>();
+		
+		map.put(null, null);
+		Integer[] arr = new Integer[]{1,2,3,4};
+		int[] arr_1 = new int[]{1,2,3,4};
+		System.out.println("arr before output>>>>>"+arr);
+		List<Integer> list = Arrays.asList(arr);
+		System.out.println("arr after output>>>>>"+Arrays.asList(arr));
+		Arrays.stream(arr_1).forEach((i)->System.out.println(i));
+	}
 	
 	@Test
 	public void test25(){

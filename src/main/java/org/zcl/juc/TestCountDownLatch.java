@@ -48,7 +48,6 @@ class LatchDemo implements Runnable{
 					}
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
 			}finally{
 				latch.countDown();
 			}

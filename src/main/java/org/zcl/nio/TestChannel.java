@@ -1,5 +1,6 @@
 package org.zcl.nio;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,6 +17,8 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -147,6 +150,25 @@ public class TestChannel {
 		outChannel.close();
 	}
 	
+	/**
+	 * 读取多个文件内容写到字符串内
+	 * @throws Exception 
+	 */
+	@Test
+	public void test6() throws Exception{
+		List<String> fileNames = Arrays.asList("zcl.txt","xel.txt","lib2lzzz.txt");
+		File out = new File("total.txt");
+		FileChannel mFileChannel = new FileOutputStream(out).getChannel();
+        FileChannel inFileChannel;
+        for(String infile:fileNames){
+            File fin = new File(infile) ;
+            inFileChannel = new FileInputStream(fin).getChannel();
+            inFileChannel.transferTo(0, inFileChannel.size(),mFileChannel);
+            inFileChannel.close();
+        }
+        mFileChannel.close();
+	}
+	
 	//2.使用直接缓冲区完成文件的复制(内存映射文件)
 	@Test
 	public void test1() throws Exception{
@@ -202,7 +224,6 @@ public class TestChannel {
 				fos.close();
 				fis.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
