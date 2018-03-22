@@ -7,21 +7,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TestCyclicBarrier2 {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception, BrokenBarrierException {
 		long start=1L;//开始值
-        long end=1000000000L;//结束值
+        long end=100000000L;//结束值
         int parties = 5;
 		Vector<Long> v= new Vector<>();
-		CyclicBarrier cb = new CyclicBarrier(parties, new Runnable() {
+		/*CyclicBarrier cb = new CyclicBarrier(parties, new Runnable() {
 			@Override
 			public void run() {
 				System.out.println("totalSum>>>>>>>>>>>>"+v.stream().reduce(0L, Long::sum));
 			}
-		});
+		});*/
+		CyclicBarrier cb = new CyclicBarrier(parties);
+		
 		ExecutorService executor = Executors.newFixedThreadPool(5);
 		for(int i = 0;i<parties;i++){
 			executor.submit(new CalculteSum(cb,v,start,end,parties,i));
 		}
+		System.out.println("totalSum>>>>>>>>>>>>"+v.stream().reduce(0L, Long::sum));
 		executor.shutdown();
 	}
 	static class CalculteSum implements Runnable{

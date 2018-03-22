@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -96,6 +97,68 @@ public class TestRelationGradeUser {
 			);
 	
 	@Test
+	public void test32(){
+		List<String> list = new ArrayList<>();
+		Set<String> set = new HashSet<>();
+		Map<String,String> map = new HashMap<>();
+	}
+	
+	@Test
+	public void test31(){
+		String str = "";
+		for(int i = 0;i<10;i++){
+			str += UUID.randomUUID().toString();
+		}
+		System.out.println("str>>>>>>>>>>>>>>>>>>>>>>>"+str);
+		System.out.println("***************************************");
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0;i<10;i++){
+			sb.append(UUID.randomUUID().toString());
+		}
+		System.out.println("sb>>>>>>>>>>>>>>>>>>>>>>>>"+sb.toString());
+	}
+	
+	
+	@Test
+	public void test30(){
+		Integer i1 = new Integer(100); 
+        Integer i2 = new Integer(100); 
+        if (i1 == i2 ) {
+        	System.out.println("相等!"); 
+        } else {
+        	System.out.println("不相等!"); 
+        }
+        
+        i1 = new Integer(200); 
+        i2 = new Integer(200); 
+        if (i1 == i2 ) {
+        	System.out.println("相等!"); 
+        } else {
+        	System.out.println("不相等!"); 
+        }
+	}
+	
+	@Test
+	public void test29(){
+		Integer i1 = 100; 
+        Integer i2 = 100; 
+        if (i1 == i2 ) {
+        	System.out.println("相等!"); 
+        } else {
+        	System.out.println("不相等!"); 
+        }
+        
+        i1 = 200; 
+        i2 = 200; 
+        if (i1 == i2 ) {
+        	System.out.println("相等!"); 
+        } else {
+        	System.out.println("不相等!"); 
+        }
+	}
+	
+	@Test
 	public void test28(){
 		List<String> list = new ArrayList<>();
 		list.add("A");
@@ -158,7 +221,7 @@ public class TestRelationGradeUser {
 		System.out.println("arr before output>>>>>"+arr);
 		List<Integer> list = Arrays.asList(arr);
 		System.out.println("arr after output>>>>>"+Arrays.asList(arr));
-		Arrays.stream(arr_1).forEach((i)->System.out.println(i));
+		Arrays.stream(arr_1).forEach(System.out::println);
 	}
 	
 	@Test

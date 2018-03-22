@@ -1,6 +1,5 @@
 package org.zcl.mytest;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,25 +48,19 @@ public class TestCollections {
 		System.out.println(Objects.equals(c, d));
 	}
 	
-	@Test
-	public void test0(){
-		System.out.println(add());
-	}
-	@SuppressWarnings("static-access")
-	public String add(){
-		try {
-			final String message = "";
-			Runnable r = new Runnable() {
-				@Override
-				public void run() {
-					throw new RuntimeException("error");
-				}
-			};
-			Thread t = new Thread(r);
-			t.start();
-		} catch (Exception e) {
-			
+	/*@Test
+	public void test31(){
+		String str = "";
+		for(int i = 0;i<10;i++){
+			str += UUID.randomUUID().toString();
 		}
-		return "";
-	}
+		System.out.println("str>>>>>>>>>>>>>>>>>>>>>>>"+str);
+		System.out.println("***************************************");
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0;i<10;i++){
+			sb.append(UUID.randomUUID().toString());
+		}
+		System.out.println("sb>>>>>>>>>>>>>>>>>>>>>>>>"+sb.toString());
+	}*/
 }

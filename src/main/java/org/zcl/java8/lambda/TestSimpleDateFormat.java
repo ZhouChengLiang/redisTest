@@ -1,8 +1,8 @@
 package org.zcl.java8.lambda;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -13,7 +13,7 @@ public class TestSimpleDateFormat {
 	
 	public static void main(String[] args) throws Exception {
 		
-		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		
 		Callable<Date> task = new Callable<Date>() {
 
@@ -36,7 +36,7 @@ public class TestSimpleDateFormat {
 			System.out.println(future.get());
 		}
 		
-		pool.shutdown();*/
+		pool.shutdown();
 		
 		//解决多线程安全问题
 		/*Callable<Date> task = new Callable<Date>() {
@@ -62,7 +62,7 @@ public class TestSimpleDateFormat {
 		
 		pool.shutdown();*/
 		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
+		/*DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
 		
 		Callable<LocalDate> task = new Callable<LocalDate>() {
 
@@ -86,7 +86,7 @@ public class TestSimpleDateFormat {
 			System.out.println(future.get());
 		}
 		
-		pool.shutdown();
+		pool.shutdown();*/
 	}
 
 }
