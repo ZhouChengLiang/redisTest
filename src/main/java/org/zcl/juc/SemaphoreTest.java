@@ -1,33 +1,32 @@
 package org.zcl.juc;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 public class SemaphoreTest {
 
-	private static final int THREAD_COUNT = 30;
-
-	private static ExecutorService threadPool = Executors
-			.newFixedThreadPool(THREAD_COUNT);
-
-	private static Semaphore s = new Semaphore(10,true);
+	final Semaphore s = new Semaphore(2,false);
 	
-	public static void main(String[] args) {
-		for (int i = 0; i < THREAD_COUNT; i++) {
-			threadPool.execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						s.acquire();
-						System.out.println("save data>>>>>"+Thread.currentThread().getName()+" "+s.availablePermits()+","+s.getQueueLength()+","+s.hasQueuedThreads());
-						s.release();
-					} catch (InterruptedException e) {
-					}
-				}
-			});
+	public void dosomethings(){
+		try {
+			System.out.println(Thread.currentThread().getName()+" is waiting to get semaphore at "+System.currentTimeMillis());
+			s.acquire();
+			System.out.println(Thread.currentThread().getName()+" is already get semaphore "+System.currentTimeMillis());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}finally{
+			s.release();
 		}
-
-		threadPool.shutdown();
+	}
+	public static void main(String[] args) {
+		SemaphoreTest st = new SemaphoreTest();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		new Thread(()->st.dosomethings()).start();
+		
 	}
 }
