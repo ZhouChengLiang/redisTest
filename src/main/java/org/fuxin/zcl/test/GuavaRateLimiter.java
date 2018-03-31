@@ -1,7 +1,6 @@
 package org.fuxin.zcl.test;
 
-import java.time.Duration;
-import java.time.Instant;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.util.concurrent.RateLimiter;
@@ -18,33 +17,30 @@ public class GuavaRateLimiter {
 		}
 	}
 	
-	public static void main(String[] args) throws Exception {
-		GuavaRateLimiter gr = new GuavaRateLimiter();
-		Instant start = Instant.now();
-		Thread t1 = new Thread(()->gr.handlerWithLimiter(), "A01");
-		t1.start();
-		Thread t2 = new Thread(()->gr.handlerWithLimiter(), "A02");
-		t2.start();
-		Thread t3 = new Thread(()->gr.handlerWithLimiter(), "A03");
-		t3.start();
-		Thread t4 = new Thread(()->gr.handlerWithLimiter(), "A04");
-		t4.start();
-		Thread t5 = new Thread(()->gr.handlerWithLimiter(), "A05");
-		t5.start();
-		Thread t6 = new Thread(()->gr.handlerWithLimiter(), "A06");
-		t6.start();
-		Thread t7 = new Thread(()->gr.handlerWithLimiter(), "A07");
-		t7.start();
-		Thread t8 = new Thread(()->gr.handlerWithLimiter(), "A08");
-		t8.start();
-		t1.join();
-		t2.join();
-		t3.join();
-		t4.join();
-		t5.join();
-		t6.join();
-		t7.join();
-		t8.join();
-		System.out.println("It costs "+Duration.between(start, Instant.now()));
+	
+	public void limit(){
+		/* 每秒向桶中存放5个Token */
+		for(int i = 0;i< 10;i++){
+			double waitTime = limit.acquire();
+			System.out.println(waitTime+">>>>>>"+UUID.randomUUID().toString());
+		}
+	}
+	
+	public void tryDoSomeThings(){
+		/*boolean result = limit.tryAcquire();
+		
+		if(result){
+			System.out.println(Thread.currentThread().getName()+" 成功获取到Token");
+		}*/
+		
+		//尝试从桶中获取Token，只等待50ms
+		boolean result = limit.tryAcquire(50, TimeUnit.MILLISECONDS);
+		if(result){
+			System.out.println(Thread.currentThread().getName()+" 等待时间后成功获取到Token");
+		}else{
+			System.out.println(Thread.currentThread().getName()+" 等待时间后还是没能获取到Token！！！");
+		}
+//		double waitTime = limit.acquire();
+//		System.out.println(Thread.currentThread().getName()+" 成功获取到Token");
 	}
 }
