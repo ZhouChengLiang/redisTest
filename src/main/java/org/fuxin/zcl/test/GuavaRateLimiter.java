@@ -26,6 +26,7 @@ public class GuavaRateLimiter {
 		}
 	}
 	
+	
 	public void tryDoSomeThings(){
 		/*boolean result = limit.tryAcquire();
 		
@@ -42,5 +43,7 @@ public class GuavaRateLimiter {
 		}
 //		double waitTime = limit.acquire();
 //		System.out.println(Thread.currentThread().getName()+" 成功获取到Token");
+	}
+	public static void main(String[] args) {
 	}
 }
