@@ -45,5 +45,6 @@ public class GuavaRateLimiter {
 //		System.out.println(Thread.currentThread().getName()+" 成功获取到Token");
 	}
 	public static void main(String[] args) {
+		System.out.println();
 	}
 }
