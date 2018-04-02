@@ -25,8 +25,7 @@ public class CountDownLatchTest {
 				c.countDown();
 			}
 		}).start();
-		c.countDown();
-//		c.await(1, TimeUnit.MILLISECONDS);
+//		c.countDown();
 		c.await();
 		System.out.println("3");
 	}
