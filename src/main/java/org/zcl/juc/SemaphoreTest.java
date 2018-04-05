@@ -4,13 +4,12 @@ import java.util.concurrent.Semaphore;
 
 public class SemaphoreTest {
 
-	final Semaphore s = new Semaphore(2,false);
+	final Semaphore s = new Semaphore(2,true);
 	
 	public void dosomethings(){
 		try {
-			System.out.println(Thread.currentThread().getName()+" is waiting to get semaphore at "+System.currentTimeMillis());
 			s.acquire();
-			System.out.println(Thread.currentThread().getName()+" is already get semaphore "+System.currentTimeMillis());
+			System.out.println(Thread.currentThread().getName()+" >>> "+System.currentTimeMillis());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}finally{
