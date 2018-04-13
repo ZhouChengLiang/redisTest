@@ -18,23 +18,7 @@ public class TestCyclicBarrier {
 			}
 		});
 		ExecutorService executor = Executors.newFixedThreadPool(5);
-		System.out.println("CPU Counts>>>>>>>>>>>>>>>"+Runtime.getRuntime().availableProcessors());
-		/*ExecutorService executor  = new ThreadPoolExecutor(4, 4,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(20));
-		for(int i = 0 ;i < 20;i++){
-			executor.execute(new Runnable() {
-				
-				@Override
-				public void run() {
-					int sum = 0;
-					for(int i=0;i<1000000000;i++){
-						sum += i;
-					}
-					System.out.println(">>>>>>>>>>>>>>>>"+sum);
-				}
-			});
-		}*/
+//		System.out.println("CPU Counts>>>>>>>>>>>>>>>"+Runtime.getRuntime().availableProcessors());
 		executor.execute(new PrintNum(cb));
 		executor.execute(new PrintNum(cb));
 		executor.execute(new PrintNum(cb));
