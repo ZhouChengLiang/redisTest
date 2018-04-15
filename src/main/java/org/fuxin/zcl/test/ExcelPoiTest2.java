@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -118,7 +117,7 @@ public class ExcelPoiTest2 {
     	list.add(agentSettle_4);
     	list.add(agentSettle_5);
     	list.add(agentSettle_6);
-    	Map<Integer,List<AgentSettle>> map = list.stream().collect(Collectors.groupingBy(AgentSettle::getStockId,LinkedHashMap::new,Collectors.toList()));
+    	/*Map<Integer,List<AgentSettle>> map = list.stream().collect(Collectors.groupingBy(AgentSettle::getStockId,LinkedHashMap::new,Collectors.toList()));
     	List<AgentSettle> result = new ArrayList<>();
     	for(Map.Entry<Integer, List<AgentSettle>> entry:map.entrySet()){
     		Integer count = entry.getValue().size();
@@ -126,7 +125,7 @@ public class ExcelPoiTest2 {
     			ageSettle.setSpanRows(count);
     			result.add(ageSettle);
     		}
-    	}
+    	}*/
         
         HSSFWorkbook workbook = new HSSFWorkbook();  // 创建一个excel  
         // excel生成过程: excel-->sheet-->row-->cell  
@@ -159,17 +158,6 @@ public class ExcelPoiTest2 {
         cellStyle.setBorderRight(BorderStyle.THIN);  
         cellStyle.setBorderTop(BorderStyle.THIN);  
         List<Integer> spanRows = Arrays.asList(2,4,5);// 0,2
-        // 8行表示 合并列的到哪几列为止
-        /*for(int i = 1 ;i < 8;i++){
-	           for(int j = 0;j<8 ;j++){
-        		   CellRangeAddress cra =new CellRangeAddress(2*(i-1)+1, 2*i, j, j);// 起始行, 终止行, 起始列, 终止列  
-		           sheet.addMergedRegion(cra);  
-		           RegionUtil.setBorderBottom(1, cra, sheet); // 下边框  
-		           RegionUtil.setBorderLeft(1, cra, sheet); // 左边框  
-		           RegionUtil.setBorderRight(1, cra, sheet); // 有边框  
-		           RegionUtil.setBorderTop(1, cra, sheet); // 上边框  
-	           }
-	     }*/
         for(int j = 0;j<8 ;j++){//怎么由2,4,5  ->>> 1,2,3,6,7,11
         	CellRangeAddress cra =new CellRangeAddress(1, 2, j, j);// 起始行, 终止行, 起始列, 终止列  
             sheet.addMergedRegion(cra);  
@@ -219,20 +207,6 @@ public class ExcelPoiTest2 {
     
     @Test
     public void test1(){
-    	//2,4,5  ->>> 1,2,3,6,7,11
-	    	//1,2
-	    	//3,6
-	    	//7,11
-    	/*List<Integer> list = Arrays.asList(1,2,3,4,5,6);
-    	Map<Integer,Integer> linkedMap = new LinkedHashMap<>();
-    	List<Integer> xPositionList = new ArrayList<>();
-    	xPositionList.add(1);
-    	for(Integer id:list){
-    		Integer xPosition = Collections.max(xPositionList);
-    		linkedMap.put(xPosition, xPosition+id-1);
-    		xPositionList.add(xPosition+id);
-    	}
-    	System.out.println(linkedMap);*/
     	List<Integer> list = Arrays.asList(1,2,3,4,5,6);
     	Map<Integer,Integer> positions = transPositionMap(list, 1);
     	System.out.println(positions);
