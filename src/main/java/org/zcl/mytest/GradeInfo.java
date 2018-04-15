@@ -52,7 +52,83 @@ public class GradeInfo {
 			return false;
 		return true;
 	}
-    
-    
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Integer grade) {
+		this.grade = grade;
+	}
+
+	public Integer getRequiredExperience() {
+		return requiredExperience;
+	}
+
+	public void setRequiredExperience(Integer requiredExperience) {
+		this.requiredExperience = requiredExperience;
+	}
+
+	public Integer getTotalSumExperience() {
+		return totalSumExperience;
+	}
+
+	public void setTotalSumExperience(Integer totalSumExperience) {
+		this.totalSumExperience = totalSumExperience;
+	}
+
+	public String getGradeName() {
+		return gradeName;
+	}
+
+	public void setGradeName(String gradeName) {
+		this.gradeName = gradeName;
+	}
+
+	public String getGradeIcon() {
+		return gradeIcon;
+	}
+
+	public void setGradeIcon(String gradeIcon) {
+		this.gradeIcon = gradeIcon;
+	}
+
+	public Integer getCurrentUsers() {
+		return currentUsers;
+	}
+
+	public void setCurrentUsers(Integer currentUsers) {
+		this.currentUsers = currentUsers;
+	}
+
+	public Integer getCountyCode() {
+		return countyCode;
+	}
+
+	public void setCountyCode(Integer countyCode) {
+		this.countyCode = countyCode;
+	}
+
+	public GradeInfo(Integer id, Integer grade, Integer requiredExperience, Integer totalSumExperience,
+			String gradeName, String gradeIcon, Integer currentUsers, Integer countyCode) {
+		super();
+		this.id = id;
+		this.grade = grade;
+		this.requiredExperience = requiredExperience;
+		this.totalSumExperience = totalSumExperience;
+		this.gradeName = gradeName;
+		this.gradeIcon = gradeIcon;
+		this.currentUsers = currentUsers;
+		this.countyCode = countyCode;
+	}
+    
+	public GradeInfo(){}
 }

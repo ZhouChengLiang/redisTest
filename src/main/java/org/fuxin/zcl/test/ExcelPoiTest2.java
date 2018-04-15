@@ -2,7 +2,6 @@ package org.fuxin.zcl.test;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +25,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 import org.junit.Test;
 
-public class ExcelPoiTest {  
+public class ExcelPoiTest2 {  
   
     public static void main(String[] args) {  
           
@@ -239,6 +238,12 @@ public class ExcelPoiTest {
     	System.out.println(positions);
     }
     
+    /**
+     * 根据跨行数来转化 CellRangeAddress(int firstRow, int lastRow, int firstCol, int lastCol) 的 firstRow 与 lastRow
+     * @param list   每条记录需要的跨行数
+     * @param minRow 从第几行开始跨行
+     * @return
+     */
     private Map<Integer,Integer> transPositionMap(List<Integer> list,Integer minRow){
     	if(CollectionUtils.isNotEmpty(list)){
     		Map<Integer,Integer> linkedMap = new LinkedHashMap<>();
@@ -261,48 +266,40 @@ public class ExcelPoiTest {
     
     @Test
     public void test2(){
-        HSSFWorkbook workbook = new HSSFWorkbook();  // 创建一个excel  
-        HSSFSheet sheet = workbook.createSheet("test"); // 为excel创建一个名为test的sheet页
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("test");
         HSSFRow row = sheet.createRow(0);
         String[] strArr = {"入库时间","产品名","商业公司","批号","单价","数量","金额","有效期","结算时间","实际结算数量","实际结算单价","实际结算金额","票号","税金","备注"};
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        Font fontStyle = workbook.createFont();
+//        fontStyle.setBold(true);
+//        fontStyle.setFontName("黑体"); 
+        fontStyle.setFontHeightInPoints((short) 11);  
+        cellStyle.setFont(fontStyle);  
+        cellStyle.setAlignment(HorizontalAlignment.CENTER); 
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         for(int i = 0;i<strArr.length;i++){
         	HSSFCell cell = row.createCell(i);
         	cell.setCellValue(strArr[i]);
+        	cell.setCellStyle(cellStyle);
         }
-        for(int i = 1;i < 50 ;i++){
+        for(int i = 1;i < 16 ;i++){
         	row = sheet.createRow(i);
         	for(int j = 0;j<strArr.length;j++){
         		HSSFCell cell = row.createCell(j); 
         		cell.setCellValue("单元格"+i);
+        		cell.setCellStyle(cellStyle);
         	}
         }
-        HSSFCellStyle cellStyle = workbook.createCellStyle(); // 单元格样式  
-        Font fontStyle = workbook.createFont(); // 字体样式  
-        fontStyle.setBold(true); // 加粗  
-        fontStyle.setFontName("黑体"); // 字体  
-        fontStyle.setFontHeightInPoints((short) 11); // 大小  
-        cellStyle.setFont(fontStyle);  
-        cellStyle.setAlignment(HorizontalAlignment.CENTER); 
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-//        cellStyle.setBorderBottom(BorderStyle.THIN);  
-//        cellStyle.setBorderLeft(BorderStyle.THIN);  
-//        cellStyle.setBorderRight(BorderStyle.THIN);  
-//        cellStyle.setBorderTop(BorderStyle.THIN);  
-        List<Integer> spanRows = Arrays.asList(2,3,4,5,6,7,2,3,2,1,2,1,3,4,1,3,4);
+        List<Integer> spanRows = Arrays.asList(1,2,3,4,3,2,1);
         Map<Integer,Integer> positions = transPositionMap(spanRows, 1);
         System.out.println("positions>>>>>>>>>>>>>>>>"+positions);
-        for(int j = 0;j<8 ;j++){//怎么由2,4,5  ->>> 1,2,3,6,7,11
+        for(int j = 0;j<8 ;j++){
         	for(Map.Entry<Integer, Integer> entry:positions.entrySet()){
         		CellRangeAddress cra =new CellRangeAddress(entry.getKey(),entry.getValue(), j, j);// 起始行, 终止行, 起始列, 终止列  
                 sheet.addMergedRegion(cra); 
-//                RegionUtil.setBorderBottom(1, cra, sheet); // 下边框  
-//                RegionUtil.setBorderLeft(1, cra, sheet); // 左边框  
-//                RegionUtil.setBorderRight(1, cra, sheet); // 有边框  
-//                RegionUtil.setBorderTop(1, cra, sheet); // 上边框  
-                
         	}
         }
-        // 输出到本地  
         String excelName = "D:/myExcel.xls";  
         FileOutputStream out = null;  
         try {  
@@ -324,460 +321,4 @@ public class ExcelPoiTest {
     
     
     }
-    
-    
-}
-class AgentSettle implements Serializable{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1925078424573982052L;
-	
-	public AgentSettle(){}
-	
-	public AgentSettle(Integer stockId, String batchNo, Date stockTime, Double unitPrice, Integer amount,
-			Double totalMoney, Date expiryTime, String drugShowName, String dispatchName, Integer actualAmount,
-			Double actualUnitPrice, Double actualMoney, Double actualTax, String ticketNo, Date settleTime,
-			String remark) {
-		this.stockId = stockId;
-		this.batchNo = batchNo;
-		this.stockTime = stockTime;
-		this.unitPrice = unitPrice;
-		this.amount = amount;
-		this.totalMoney = totalMoney;
-		this.expiryTime = expiryTime;
-		this.drugShowName = drugShowName;
-		this.dispatchName = dispatchName;
-		this.actualAmount = actualAmount;
-		this.actualUnitPrice = actualUnitPrice;
-		this.actualMoney = actualMoney;
-		this.actualTax = actualTax;
-		this.ticketNo = ticketNo;
-		this.settleTime = settleTime;
-		this.remark = remark;
-	}
-
-	/**
-	 * 库存结算明细id
-	 */
-	private Integer id;
-	
-	/**
-	 * 库存明细id
-	 */
-	private Integer stockId;
-	
-	/**
-	 * 批号
-	 */
-	private String batchNo;
-	
-	/**
-	 * 入库时间
-	 */
-	private Date stockTime;
-	
-	/**
-	 * 跨行数 
-	 */
-	private Integer spanRows;
-	
-	/**
-	 * 单价
-	 */
-	private Double unitPrice;
-	
-	/**
-	 * 数量
-	 */
-	private Integer amount;
-	
-	/**
-	 * 金额
-	 */
-	private Double totalMoney;
-	
-	/**
-	 * 有效期
-	 */
-	private Date expiryTime;
-	
-	/**
-     * 药品名称
-     */
-    private String drugName;
-
-    /**
-     * 药品规格
-     */
-    private String  drugSpec;
-
-    /**
-     * 药品商品名
-     */
-    private String  drugProductName;
-
-    /**
-     * 药品显示名 格式：drug_name(product_name) | spec | factory_name
-     */
-    private String  drugShowName;
-
-    /**
-     * 药品id
-     */
-    private Integer drugId;
-
-    /**
-     * 商业公司id
-     */
-    private Integer dispatchId;
-
-    /**
-     * 商业公司名称
-     */
-    private String dispatchName;
-
-    /**
-     * 厂家名称
-     */
-    private String  factoryName;
-    
-    /**
-     * 转化比
-     */
-    private Integer transitionRatio;
-    
-    /**
-     * 实际结算数量
-     */
-    private Integer actualAmount;
-    
-    /**
-     * 实际结算单价
-     */
-    private Double actualUnitPrice;
-    
-    /**
-     * 实际结算金额
-     */
-    private Double actualMoney;
-    
-    /**
-     * 实际结算税金
-     */
-    private Double actualTax;
-    
-    /**
-     * 票号
-     */
-    private String ticketNo;
-    
-    /**
-     * 结算状态(0 未结算 1 已结算)
-     */
-    private Integer status;
-    
-    /**
-     * 结算时间
-     */
-    private Date settleTime;
-    
-    /**
-     * 备注
-     */
-    private String remark;
-	
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
-
-    /**
-     * 创建修改人
-     */
-    private Integer operatorId;
-    
-    /**
-     * 给页脚提供汇总数据 数量
-     */
-    private Integer finalAmount;
-    
-    /**
-     * 给页脚提供汇总数据 金额
-     */
-    private Double finalMoney;
-    
-    /**
-     * 给页脚提供汇总数据 税金
-     */
-    private Double finalTax;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getStockId() {
-		return stockId;
-	}
-
-	public void setStockId(Integer stockId) {
-		this.stockId = stockId;
-	}
-
-	public String getDrugName() {
-		return drugName;
-	}
-
-	public void setDrugName(String drugName) {
-		this.drugName = drugName;
-	}
-
-	public String getDrugSpec() {
-		return drugSpec;
-	}
-
-	public void setDrugSpec(String drugSpec) {
-		this.drugSpec = drugSpec;
-	}
-
-	public String getDrugProductName() {
-		return drugProductName;
-	}
-
-	public void setDrugProductName(String drugProductName) {
-		this.drugProductName = drugProductName;
-	}
-
-	public String getDrugShowName() {
-		return drugShowName;
-	}
-
-	public void setDrugShowName(String drugShowName) {
-		this.drugShowName = drugShowName;
-	}
-
-	public Integer getDrugId() {
-		return drugId;
-	}
-
-	public void setDrugId(Integer drugId) {
-		this.drugId = drugId;
-	}
-
-	public Integer getDispatchId() {
-		return dispatchId;
-	}
-
-	public void setDispatchId(Integer dispatchId) {
-		this.dispatchId = dispatchId;
-	}
-
-	public String getDispatchName() {
-		return dispatchName;
-	}
-
-	public void setDispatchName(String dispatchName) {
-		this.dispatchName = dispatchName;
-	}
-
-	public String getFactoryName() {
-		return factoryName;
-	}
-
-	public void setFactoryName(String factoryName) {
-		this.factoryName = factoryName;
-	}
-
-	public Integer getTransitionRatio() {
-		return transitionRatio;
-	}
-
-	public void setTransitionRatio(Integer transitionRatio) {
-		this.transitionRatio = transitionRatio;
-	}
-
-	public Integer getActualAmount() {
-		return actualAmount;
-	}
-
-	public void setActualAmount(Integer actualAmount) {
-		this.actualAmount = actualAmount;
-	}
-
-	public Double getActualUnitPrice() {
-		return actualUnitPrice;
-	}
-
-	public void setActualUnitPrice(Double actualUnitPrice) {
-		this.actualUnitPrice = actualUnitPrice;
-	}
-
-	public Double getActualMoney() {
-		return actualMoney;
-	}
-
-	public void setActualMoney(Double actualMoney) {
-		this.actualMoney = actualMoney;
-	}
-
-	public Double getActualTax() {
-		return actualTax;
-	}
-
-	public void setActualTax(Double actualTax) {
-		this.actualTax = actualTax;
-	}
-
-	public String getTicketNo() {
-		return ticketNo;
-	}
-
-	public void setTicketNo(String ticketNo) {
-		this.ticketNo = ticketNo;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public Integer getOperatorId() {
-		return operatorId;
-	}
-
-	public void setOperatorId(Integer operatorId) {
-		this.operatorId = operatorId;
-	}
-
-	public Date getSettleTime() {
-		return settleTime;
-	}
-
-	public void setSettleTime(Date settleTime) {
-		this.settleTime = settleTime;
-	}
-	
-	@Override
-	public String toString() {
-		return "AgentSettle [id=" + id + ", stockId=" + stockId + ", batchNo=" + batchNo + ", spanRows=" + spanRows
-				+ "]";
-	}
-
-	public Integer getFinalAmount() {
-		return finalAmount;
-	}
-
-	public void setFinalAmount(Integer finalAmount) {
-		this.finalAmount = finalAmount;
-	}
-
-	public Double getFinalMoney() {
-		return finalMoney;
-	}
-
-	public void setFinalMoney(Double finalMoney) {
-		this.finalMoney = finalMoney;
-	}
-
-	public Double getFinalTax() {
-		return finalTax;
-	}
-
-	public void setFinalTax(Double finalTax) {
-		this.finalTax = finalTax;
-	}
-
-	public String getBatchNo() {
-		return batchNo;
-	}
-
-	public void setBatchNo(String batchNo) {
-		this.batchNo = batchNo;
-	}
-
-	public Date getStockTime() {
-		return stockTime;
-	}
-
-	public void setStockTime(Date stockTime) {
-		this.stockTime = stockTime;
-	}
-
-	public Double getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(Double unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public Double getTotalMoney() {
-		return totalMoney;
-	}
-
-	public void setTotalMoney(Double totalMoney) {
-		this.totalMoney = totalMoney;
-	}
-
-	public Date getExpiryTime() {
-		return expiryTime;
-	}
-
-	public void setExpiryTime(Date expiryTime) {
-		this.expiryTime = expiryTime;
-	}
-
-	public Integer getSpanRows() {
-		return spanRows;
-	}
-
-	public void setSpanRows(Integer spanRows) {
-		this.spanRows = spanRows;
-	}
-	
 }

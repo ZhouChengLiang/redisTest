@@ -22,4 +22,54 @@ public class GradeDistribution {
 
     private Integer countyCode;
 
+	public String getCurdate() {
+		return curdate;
+	}
+
+	public void setCurdate(String curdate) {
+		this.curdate = curdate;
+	}
+
+	public Integer getCurgrade() {
+		return curgrade;
+	}
+
+	public void setCurgrade(Integer curgrade) {
+		this.curgrade = curgrade;
+	}
+
+	public Integer getCurexp() {
+		return curexp;
+	}
+
+	public void setCurexp(Integer curexp) {
+		this.curexp = curexp;
+	}
+
+	public Integer getCurusers() {
+		return curusers;
+	}
+
+	public void setCurusers(Integer curusers) {
+		this.curusers = curusers;
+	}
+
+	public Integer getCountyCode() {
+		return countyCode;
+	}
+
+	public void setCountyCode(Integer countyCode) {
+		this.countyCode = countyCode;
+	}
+
+	public GradeDistribution(String curdate, Integer curgrade, Integer curexp, Integer curusers, Integer countyCode) {
+		super();
+		this.curdate = curdate;
+		this.curgrade = curgrade;
+		this.curexp = curexp;
+		this.curusers = curusers;
+		this.countyCode = countyCode;
+	}
+    
+
 }

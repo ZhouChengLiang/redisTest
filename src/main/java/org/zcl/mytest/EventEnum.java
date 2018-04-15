@@ -54,4 +54,21 @@ public enum EventEnum {
         }
         return null;
     }
+
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
+
+	public Integer getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(Integer eventType) {
+		this.eventType = eventType;
+	}
+    
 }

@@ -71,4 +71,36 @@ public enum ConstellatoryEnum {
     public static ConstellatoryEnum codeOf(int code) {
         return Optional.of(codeMap.get(code)).get();
     }
+
+
+	public Integer getCode() {
+		return code;
+	}
+
+
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public static ImmutableMap<Integer, ConstellatoryEnum> getCodemap() {
+		return codeMap;
+	}
+
+
+	public static ImmutableMap<String, ConstellatoryEnum> getNamemap() {
+		return nameMap;
+	}
+    
+    
 }
