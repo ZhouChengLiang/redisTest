@@ -224,7 +224,8 @@ public class ExcelPoiTest2 {
         	List<Integer> xPositionList = new ArrayList<>();
         	xPositionList.add(minRow);
         	for(Integer pos:list){
-        		if(pos==1){
+        		if(pos == 1 || pos == 0){
+        			pos = 1;
         			Integer xPosition = Collections.max(xPositionList);
         			xPositionList.add(xPosition+pos);
         			continue;
@@ -257,7 +258,7 @@ public class ExcelPoiTest2 {
         	cell.setCellValue(strArr[i]);
         	cell.setCellStyle(cellStyle);
         }
-        for(int i = 1;i < 16 ;i++){
+        for(int i = 1;i < 20 ;i++){
         	row = sheet.createRow(i);
         	for(int j = 0;j<strArr.length;j++){
         		HSSFCell cell = row.createCell(j); 
@@ -265,7 +266,7 @@ public class ExcelPoiTest2 {
         		cell.setCellStyle(cellStyle);
         	}
         }
-        List<Integer> spanRows = Arrays.asList(1,2,3,4,3,2,1);
+        List<Integer> spanRows = Arrays.asList(1,3,4,4,4,3,1);
         Map<Integer,Integer> positions = transPositionMap(spanRows, 1);
         System.out.println("positions>>>>>>>>>>>>>>>>"+positions);
         for(int j = 0;j<8 ;j++){
@@ -294,5 +295,59 @@ public class ExcelPoiTest2 {
         }  
     
     
+    }
+    
+    @Test
+    public void test3(){
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("test");
+        HSSFRow row = sheet.createRow(0);
+        String[] strArr = {"入库时间","产品名","商业公司","批号","单价","数量","金额","有效期","结算时间","实际结算数量","实际结算单价","实际结算金额","票号","税金","备注"};
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        Font fontStyle = workbook.createFont();
+        fontStyle.setFontHeightInPoints((short) 11);  
+        cellStyle.setFont(fontStyle);  
+        cellStyle.setAlignment(HorizontalAlignment.CENTER); 
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        for(int i = 0;i<strArr.length;i++){
+        	HSSFCell cell = row.createCell(i);
+        	cell.setCellValue(strArr[i]);
+        	cell.setCellStyle(cellStyle);
+        }
+        for(int i = 1;i < 20 ;i++){
+        	row = sheet.createRow(i);
+        	for(int j = 0;j<strArr.length;j++){
+        		HSSFCell cell = row.createCell(j); 
+        		cell.setCellValue("单元格"+i);
+        		cell.setCellStyle(cellStyle);
+        	}
+        }
+        //spanRows 表示 每条记录可能的跨行数
+        List<Integer> spanRows = Arrays.asList(1,3,4,4,4,3,1);
+        Map<Integer,Integer> positions = transPositionMap(spanRows, 1);
+        for(int j = 0;j<8 ;j++){
+        	for(Map.Entry<Integer, Integer> entry:positions.entrySet()){
+        		CellRangeAddress cra =new CellRangeAddress(entry.getKey(),entry.getValue(), j, j);// 起始行, 终止行, 起始列, 终止列  
+                sheet.addMergedRegion(cra); 
+        	}
+        }
+        String excelName = "D:/myExcel.xls";  
+        FileOutputStream out = null;  
+        try {  
+            out = new FileOutputStream(excelName);  
+            workbook.write(out);  
+            out.flush();  
+            out.close();  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        } finally {  
+            if (out != null)  
+                try {  
+                    out.close();  
+                } catch (IOException e) {  
+                    e.printStackTrace();  
+                }  
+            out = null;  
+        }  
     }
 }

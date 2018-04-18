@@ -62,7 +62,7 @@ public class UserExpInt {
 		this.countyCode = countyCode;
 	}
     
-	
+	public UserExpInt(){}
     
 
 }
