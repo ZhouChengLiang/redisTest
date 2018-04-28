@@ -69,7 +69,6 @@ public class WaterMarkUtils {
     		g.setFont(font);              //设置字体
     		int x = 0;  
     		int y = srcImgHeight;  
-    		
     		System.out.println("x--->"+x+", y--->"+y+", srcImgWidth--->"+srcImgWidth+", --->"+srcImgHeight);
     		g.drawString(waterMarkContent, x, y);  //画出水印
     		g.dispose();  
