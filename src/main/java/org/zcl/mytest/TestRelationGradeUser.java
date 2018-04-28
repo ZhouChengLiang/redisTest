@@ -208,6 +208,8 @@ public class TestRelationGradeUser {
 			map.put(k, (Hashing.sha256().hashString(abc, Charset.forName("UTF-8")).toString()));
 		});
 		map.forEach((k,v)->System.out.println(k+">>>>>>>>>>>>>"+v));
+		
+		
 	}
 	
 	@Test
