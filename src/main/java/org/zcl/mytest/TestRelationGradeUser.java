@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -98,6 +99,8 @@ public class TestRelationGradeUser {
 	
 	@Test
 	public void test33(){
+		Base64.getDecoder();//解码
+		Base64.getEncoder();//编码
 		
 	}
 	

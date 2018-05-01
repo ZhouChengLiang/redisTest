@@ -5,7 +5,6 @@ import java.io.IOException;
 import com.google.zxing.WriterException;
 
 public class Qrest {
-
     public static void main(String[] args) {
 
      String content="大家好，我是吃瓜群众，很高兴认识大家";

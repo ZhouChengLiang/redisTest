@@ -3,7 +3,6 @@ package org.fuxin.zcl.test.watermark;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,12 +36,16 @@ public class JunitImage {
         try {
             // 1、源图片
             java.awt.Image srcImg = ImageIO.read(new File(srcImgPath));
-            BufferedImage buffImg = new BufferedImage(srcImg.getWidth(null),srcImg.getHeight(null), BufferedImage.TYPE_INT_RGB);
+            int width = srcImg.getWidth(null);
+            int heigth = srcImg.getHeight(null);
+            BufferedImage buffImg = new BufferedImage(width,heigth, BufferedImage.TYPE_INT_RGB);
             // 2、得到画笔对象
             Graphics2D g = buffImg.createGraphics();
             // 3、设置对线段的锯齿状边缘处理
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.drawImage(srcImg.getScaledInstance(srcImg.getWidth(null), srcImg.getHeight(null), java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+            //g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            //g.drawImage(srcImg.getScaledInstance(width, heigth, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+//            g.drawImage(srcImg,0,0, width, heigth, null);
+            g.drawImage(srcImg.getScaledInstance(width, heigth, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
             // 4、设置水印旋转
             if (null != degree) {
                 g.rotate(Math.toRadians(degree),  buffImg.getWidth()/2,buffImg.getHeight() /2);
@@ -50,11 +53,26 @@ public class JunitImage {
             // 5、设置水印文字颜色
             g.setColor(color);
             // 6、设置水印文字Font
-            g.setFont(new java.awt.Font("宋体", java.awt.Font.BOLD, buffImg.getHeight()/15));
+            g.setFont(new java.awt.Font("微软雅黑", java.awt.Font.BOLD, 120));
             // 7、设置水印文字透明度
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.15f));
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.3F));
             // 8、第一参数->设置的内容，后面两个参数->文字在图片上的坐标位置(x,y)
-            g.drawString(logoText,  0 , buffImg.getHeight()-(buffImg.getHeight()/8));
+            int width1 = 120*getTextLength(logoText);
+            int heigth1 = 120;
+            
+            int widthDiff = width -width1;
+            int heigthDiff = heigth -heigth1;
+            int x = 10;
+            int y = 1000;
+            
+            if(x >widthDiff){
+            	x = widthDiff;
+            }
+            if(y>heigthDiff){
+            	y = heigthDiff;
+            }
+            System.out.println(x+" , "+y);
+            g.drawString(logoText,x , y+120);
             // 9、释放资源
             g.dispose();
             // 10、生成图片
@@ -77,6 +95,17 @@ public class JunitImage {
             }
         }
     }
- 
+    
+    public static int getTextLength(String text){
+    	int length = text.length();
+    	for(int i = 0;i<text.length();i++){
+    		String s = String.valueOf(text.charAt(i));
+    		if(s.getBytes().length>1){
+    			length++;
+    		}
+    	}
+    	
+    	return length%2==0?length/2:length/2+1;
+    }
  
 }
