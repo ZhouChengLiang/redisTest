@@ -13,12 +13,13 @@ import javax.imageio.ImageIO;
 
 import org.junit.Test;
 
-public class JunitImage {
+public class JunitImage2 {
 	
 	
     @Test
     public void testImage(){
-        markImageByText("知药管家","D:/zcl.jpg","D:/zcl_xel.jpg",null,Color.RED,"JPG");
+//        markImageByText("知药管家","D:/zcl.jpg","D:/zcl_xel.jpg",null,Color.RED,"JPG");
+        markImageByText("知药管家","D:/zcl.jpg","D:/zcl_xel.jpg",30,Color.YELLOW,"JPG");
     }
  
     /**
@@ -41,10 +42,6 @@ public class JunitImage {
             BufferedImage buffImg = new BufferedImage(width,heigth, BufferedImage.TYPE_INT_RGB);
             // 2、得到画笔对象
             Graphics2D g = buffImg.createGraphics();
-            // 3、设置对线段的锯齿状边缘处理
-            //g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            //g.drawImage(srcImg.getScaledInstance(width, heigth, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
-//            g.drawImage(srcImg,0,0, width, heigth, null);
             g.drawImage(srcImg.getScaledInstance(width, heigth, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
             // 4、设置水印旋转
             if (null != degree) {
@@ -57,22 +54,18 @@ public class JunitImage {
             // 7、设置水印文字透明度
             g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.3F));
             // 8、第一参数->设置的内容，后面两个参数->文字在图片上的坐标位置(x,y)
-            int width1 = 120*getTextLength(logoText);
-            int heigth1 = 120;
-            
-            int widthDiff = width -width1;
-            int heigthDiff = heigth -heigth1;
-            int x = 10;
-            int y = 1000;
-            
-            if(x >widthDiff){
-            	x = widthDiff;
+            int width1 = 30*getTextLength(logoText);
+            int heigth1 = 30;
+            int x = -width/2;
+            int y = -heigth/2;
+            while(x<width*1.5){
+            	y = -heigth/2;
+            	while(y<heigth*1.5){
+            		g.drawString(logoText, x, y);
+            		y +=heigth1+100;
+            	}
+            	x+= width1 + 100;
             }
-            if(y>heigthDiff){
-            	y = heigthDiff;
-            }
-            System.out.println(x+" , "+y);
-            g.drawString(logoText,x , y+120);
             // 9、释放资源
             g.dispose();
             // 10、生成图片
