@@ -1,8 +1,10 @@
 package org.fuxin.zcl.test.articleSearch;
 
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
@@ -48,7 +50,7 @@ public class SimpleSpiderTest {
 	
 	@Test
 	public void test1(){
-		String url = "http://vcbeat.net/";
+		String url = "http://vcbeat.net";
 		Map<String, String> params = Maps.newHashMap();
 		String html = HttpClientUtils.sendGet(url, null, params);
 		Document document = Jsoup.parse(html);
@@ -140,9 +142,19 @@ public class SimpleSpiderTest {
 			String title = document_inner.select("p[class=tle]").text();
 			String author = document_inner.select("div[class=atr_info clear] span[class=name]").text();
 			String time = document_inner.select("div[class=atr_info clear] span[class=time]").text();
+			String originUrl = document_inner.select("div[class=art_text]").select("img").attr("src");
+			document_inner.select("div[class=art_text]").select("img").attr("src",url.concat(originUrl));
 			String content = document_inner.select("div[class=art_text]").html();
 			System.out.println("title >>"+title+" author >>"+author+" time >>"+time);
 			System.out.println("content>>>>>>>>>>>>>>>"+content);
 		}
+	}
+	
+	@Test
+	public void test3(){
+		String url = "http://vcbeat.net/Mjk1YTg5YmE2ZDRiNDJlN2I5ZWZkZTkwZmE3ZDhiYTU=";
+		System.out.println(url.substring(url.lastIndexOf("/")+1));
+		System.out.println(new String(Base64.getDecoder().decode(url.substring(url.lastIndexOf("/")+1))));
+//		System.out.println(UUID.randomUUID().toString());
 	}
 }

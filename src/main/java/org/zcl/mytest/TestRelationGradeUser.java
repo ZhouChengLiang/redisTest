@@ -98,6 +98,19 @@ public class TestRelationGradeUser {
 			);
 	
 	@Test
+	public void test35(){
+		
+	}
+	
+	@Test
+	public void test34(){
+		String[] arr = new String[]{"1"};
+		String brr[] = new String[]{"2"};
+		System.out.println(arr.length);
+		System.out.println(brr.length);
+	}
+	
+	@Test
 	public void test33(){
 		Base64.getDecoder();//解码
 		Base64.getEncoder();//编码
