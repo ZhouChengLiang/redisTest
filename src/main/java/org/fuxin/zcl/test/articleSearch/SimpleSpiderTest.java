@@ -1,10 +1,10 @@
 package org.fuxin.zcl.test.articleSearch;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.jsoup.Jsoup;
@@ -151,7 +151,36 @@ public class SimpleSpiderTest {
 	}
 	
 	@Test
-	public void test3(){
+	public void test3() throws Exception{
+		String originUrl = "http://www.mingyihui.net";
+		String url = originUrl + "/zhejiangsheng_hospital_1.html";
+		Document doucments = Jsoup.connect(url).get();
+		Elements elements = doucments.select("ul[class=H_main] li[class=H_list]");
+		List<String> list = new ArrayList<>();
+		for(Element element:elements){
+			String hospitalName = element.select("h3").text();
+			String hosptialDetailUrl = originUrl + element.select("h3 a").attr("href");
+			String hospitalTag = element.select("span[class=ispublic]").eachText().stream().collect(Collectors.joining(","));
+			String hospitalIntro = element.select("dl dd").get(0).text();
+			String hospitalAddress = element.select("dl dd").get(1).text();
+			String hospitalPraise = element.select("li[id=hgcount]").text();
+			String hospitalSatisfied = element.select("li span[class=starwz]").text();
+			String hospitalMajor = element.select("div[class=dd_div]").eachText().stream().collect(Collectors.joining(","));
+			list.add(hosptialDetailUrl);
+			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor+" >>> "+hosptialDetailUrl);
+		}
+		
+		//详情
+		for(String innerUrl :list){
+			Document innerDoucments = Jsoup.connect(innerUrl).get();
+			Elements innerElements = innerDoucments.select("ul[class=H_main] li[class=H_list]");
+			
+		}
+		
+	}
+	
+	@Test
+	public void test4(){
 		String url = "http://vcbeat.net/Mjk1YTg5YmE2ZDRiNDJlN2I5ZWZkZTkwZmE3ZDhiYTU=";
 		System.out.println(url.substring(url.lastIndexOf("/")+1));
 		System.out.println(new String(Base64.getDecoder().decode(url.substring(url.lastIndexOf("/")+1))));
