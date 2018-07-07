@@ -88,8 +88,8 @@ public class ImageUtil2 {
 	
 	@Test
 	public void testPressImage0(){
-		String targetImg = "D:/xel.jpg";
-		File waterImg = new File("D:/logo.png");
+		String targetImg = "D:/zcl001.jpg";
+		File waterImg = new File("D:/logo.jpg");
 		try {
 			pressImage(targetImg,waterImg, Positions.BOTTOM_LEFT, 1);
 		} catch (IOException e) {
@@ -127,6 +127,16 @@ public class ImageUtil2 {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testPressImage2() throws Exception{
+		String srcImageFile = "D:/zcl.jpg";
+		String newImageFile = "D:/zcl_thumb.jpg";
+		Integer newWidth = 200;
+		Integer newHeight = 300;
+		Thumbnails.of(srcImageFile).size(newWidth, newHeight).keepAspectRatio(true).toFile(newImageFile);
+//		Thumbnails.of(srcImageFile).keepAspectRatio(false).size(newWidth, newHeight).toFile(newImageFile);
 	}
 
 	/**
