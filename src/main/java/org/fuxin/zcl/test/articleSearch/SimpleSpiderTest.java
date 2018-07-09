@@ -3,6 +3,7 @@ package org.fuxin.zcl.test.articleSearch;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,6 +155,22 @@ public class SimpleSpiderTest {
 	@Test
 	public void test3() throws Exception{
 		String originUrl = "http://www.mingyihui.net";
+		String url_1 = originUrl+"/zhejiangsheng_hospital.html";
+		Document doc = Jsoup.connect(url_1).get();
+		Elements eles = doc.select("div.H_tra.w900 a");
+		Collections.reverse(eles);
+		//准备获取总页数
+		int pages = 1;
+		for(Element e :eles){
+			if("末页".equals(e.text())){
+				String href = e.attr("href");
+				int beginIndex = href.lastIndexOf("_");
+				int endIndex = href.lastIndexOf(".");
+				pages = Integer.valueOf(href.substring(beginIndex+1, endIndex));
+				System.out.println("pages >>>> "+pages);
+				break;
+			}
+		}
 		String url = originUrl + "/zhejiangsheng_hospital_1.html";
 		Document doucments = Jsoup.connect(url).get();
 		Elements elements = doucments.select("ul[class=H_main] li[class=H_list]");
@@ -170,7 +187,6 @@ public class SimpleSpiderTest {
 			list.add(hosptialDetailUrl);
 			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor+" >>> "+hosptialDetailUrl);
 		}
-		
 		//详情
 		for(String innerUrl :list){
 			Document innerDoucments = Jsoup.connect(innerUrl).get();
