@@ -1,7 +1,6 @@
 package org.fuxin.zcl.test.articleSearch;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -214,14 +213,14 @@ public class SimpleSpiderTest {
 			String hospitalSatisfied = element.select("li span[class=starwz]").text();
 			String hospitalMajor = element.select("div[class=dd_div]").eachText().stream().collect(Collectors.joining(","));
 			list.add(hosptialDetailUrl);
-			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor);
+//			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor);
 		}
 		
 		System.out.println("******************医院科室信息******************");
 		List<String> doctorUrls = new ArrayList<>();
 		//医院科室详情
 		for(String innerUrl :list){
-			System.out.println("innerUrl >>>"+innerUrl);
+//			System.out.println("innerUrl >>>"+innerUrl);
 			Document innerDoucments = Jsoup.connect(innerUrl).get();
 			Elements innerElements = innerDoucments.select("div.classify_list.clearfix");
 			for(Element ele1 :innerElements){
@@ -238,18 +237,96 @@ public class SimpleSpiderTest {
 					String peopleNum = ele2.select("span.color_999").text();
 					peopleNum = peopleNum.substring(0, peopleNum.length());
 					doctorUrls.add(doctorUrl);
-					System.out.println("department_1>>> "+department_1+"department_2>>> "+department_2+" ,hospitalId>>> "+hospitalId+" ,departmentId>>> "+departmentId+ " , "+peopleNum);
+//					System.out.println("department_1>>> "+department_1+"department_2>>> "+department_2+" ,hospitalId>>> "+hospitalId+" ,departmentId>>> "+departmentId+ " , "+peopleNum);
 				}
 			}
 		}
-		System.out.println("doctorUrls>>> "+doctorUrls);
+//		System.out.println("doctorUrls>>> "+doctorUrls);
 		//准备抓取医生数据了
+		List<String> doctorUrlNew = new ArrayList<>();
 		for(String doctorUrl:doctorUrls){
-			System.out.println("doctorUrl >>>"+doctorUrl);
-			Document innerDoucments = Jsoup.connect(doctorUrl).get();
+//			System.out.println("doctorUrl >>>"+doctorUrl);
+			Document doc = Jsoup.connect(doctorUrl).get();
+			// 注意配合分页数据url的问题
+			Elements eles = doc.select("div.H_tra.w1200 a");
+			Collections.reverse(eles);
+			//准备获取总页数
+			int pages = 1;
+			for(Element e :eles){
+				if("末页".equals(e.text())){
+					String href = e.attr("href");
+					int beginIndex = href.lastIndexOf("_pn");
+					int endIndex = href.lastIndexOf(".");
+					pages = Integer.valueOf(href.substring(beginIndex+3, endIndex));
+//					System.out.println("pages >>>> "+pages);
+					break;
+				}
+			}
+			//重新组装医生的信息url地址
+			for(int i = 1;i<=pages;i++){
+				doctorUrlNew.add(doctorUrl.replace(".html", "_pn"+i+".html"));
+			}
+		}
+		System.out.println("doctorUrlNew >>> "+doctorUrlNew);
+		for(String realUrl: doctorUrlNew){
+			Document doc = Jsoup.connect(realUrl).get();
 			
 		}
 		
+	}
+	
+	/**
+	 * 里面一层的医生信息
+	 * 正是因为有了擅长的全部内容所有才显示出来
+	 * 如  http://www.mingyihui.net/doctor_57341.html
+	 * @throws Exception 
+	 */
+	@Test
+	public void test7() throws Exception{
+		List<String> urls = new ArrayList<>();
+		urls.add("http://www.mingyihui.net/doctor_57341.html");
+		urls.add("http://www.mingyihui.net/doctor_57357.html");
+		for(String url:urls){
+			Document doc = Jsoup.connect(url).get();
+			String goodAt = doc.select("div.details_contant.fr > div:nth-child(2) > p").text();
+			Elements element1 = doc.select("div.out_call > table > tbody > tr:nth-child(2) > td");
+			for(int i = 1;i<element1.size();i++){
+				System.out.println(i+" >>> "+element1.get(i).text());
+			}
+			
+			Elements element2 = doc.select("div.out_call > table > tbody > tr:nth-child(3) > td");
+			for(int i = 1;i<element2.size();i++){
+				System.out.println(i+" >>> "+element2.get(i).text());
+			}
+			Elements element3 = doc.select("div.out_call > table > tbody > tr:nth-child(4) > td");
+			for(int i = 1;i<element3.size();i++){
+				System.out.println(i+" >>> "+element3.get(i).text());
+			}
+			
+			System.out.println();
+		}
+	}
+	
+	/**
+	 * 外面一页的医生信息
+	 * 很可惜 擅长的内容不全啊
+	 * 如 http://www.mingyihui.net/hospital_391/department_6_pn1.html
+	 * @throws Exception
+	 */
+	@Test
+	public void test6() throws Exception{
+		String originUrl = "http://www.mingyihui.net";
+		List<String> doctorUrlNew = new ArrayList<String>();
+		doctorUrlNew.add("http://www.mingyihui.net/hospital_391/department_6_pn1.html");
+		for(String realUrl: doctorUrlNew){
+			Document doc = Jsoup.connect(realUrl).get();
+			Elements elements = doc.select("div.H_doc_con ul li");
+			for(Element element :elements){
+				String lastUrl = originUrl + element.select("div.H_d_down.H_d.fl a").attr("href");
+				String doctorTitle = element.select("div.H_d_down.H_d.fl span.fl.doctor_titles").text();
+				System.out.println("LASTURL >>>"+lastUrl+" DOCTORTITLE >>> "+doctorTitle);
+			}
+		}
 	}
 	
 	@Test
