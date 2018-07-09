@@ -1,6 +1,7 @@
 package org.fuxin.zcl.test.articleSearch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -177,6 +178,72 @@ public class SimpleSpiderTest {
 			
 		}
 		
+	}
+	
+	@Test
+	public void test3_3() throws Exception{
+		String originUrl = "http://www.mingyihui.net";
+		String url = originUrl + "/zhejiangsheng_hospital_1.html";
+		//抓取医院的信息
+		Document doucments = Jsoup.connect(url).get();
+		Elements elements = doucments.select("ul[class=H_main] li[class=H_list]");
+		List<String> list = new ArrayList<>();
+		for(Element element:elements){
+			String hospitalName = element.select("h3").text();
+			String hosptialDetailUrl = originUrl + element.select("h3 a").attr("href").replace(".", "/departments.");
+			String hospitalTag = element.select("span[class=ispublic]").eachText().stream().collect(Collectors.joining(","));
+			String hospitalIntro = element.select("dl dd").get(0).text();
+			String hospitalAddress = element.select("dl dd").get(1).text();
+			String hospitalPraise = element.select("li[id=hgcount]").text();
+			String hospitalSatisfied = element.select("li span[class=starwz]").text();
+			String hospitalMajor = element.select("div[class=dd_div]").eachText().stream().collect(Collectors.joining(","));
+			list.add(hosptialDetailUrl);
+			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor);
+		}
+		
+		System.out.println("******************医院科室信息******************");
+		List<String> doctorUrls = new ArrayList<>();
+		//医院科室详情
+		for(String innerUrl :list){
+			System.out.println("innerUrl >>>"+innerUrl);
+			Document innerDoucments = Jsoup.connect(innerUrl).get();
+			Elements innerElements = innerDoucments.select("div.classify_list.clearfix");
+			for(Element ele1 :innerElements){
+				String department_1 = ele1.select("h3").text();//一级科室  level 1
+				Elements departmentElements = ele1.select("ul li");//二级科室 level 2
+				for(Element ele2:departmentElements){
+					String href = ele2.select("a").attr("href");
+					String doctorUrl = originUrl + href;
+					String hospitalStr = href.split("/")[1];
+					String departmentStr = href.split("/")[2];
+					String department_2 = ele2.select("a").text();
+					String hospitalId = hospitalStr.substring(hospitalStr.lastIndexOf("_")+1, hospitalStr.length());
+					String departmentId = departmentStr.substring(departmentStr.lastIndexOf("_")+1, departmentStr.lastIndexOf("."));
+					String peopleNum = ele2.select("span.color_999").text();
+					peopleNum = peopleNum.substring(0, peopleNum.length());
+					doctorUrls.add(doctorUrl);
+					System.out.println("department_1>>> "+department_1+"department_2>>> "+department_2+" ,hospitalId>>> "+hospitalId+" ,departmentId>>> "+departmentId+ " , "+peopleNum);
+				}
+			}
+		}
+		System.out.println("doctorUrls>>> "+doctorUrls);
+		//准备抓取医生数据了
+		for(String doctorUrl:doctorUrls){
+			System.out.println("doctorUrl >>>"+doctorUrl);
+			Document innerDoucments = Jsoup.connect(doctorUrl).get();
+			
+		}
+		
+	}
+	
+	@Test
+	public void test5(){
+		String href = "/hospital_391/department_4938.html";
+		String hospitalStr = href.split("/")[1];
+		String departmentStr = href.split("/")[2];
+		String hospitalId = hospitalStr.substring(hospitalStr.lastIndexOf("_")+1, hospitalStr.length());
+		String departmentId = departmentStr.substring(departmentStr.lastIndexOf("_")+1, departmentStr.lastIndexOf("."));
+		System.out.println(hospitalId +" >>> "+departmentId);
 	}
 	
 	@Test
