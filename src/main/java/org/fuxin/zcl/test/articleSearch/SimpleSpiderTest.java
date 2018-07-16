@@ -1,8 +1,10 @@
 package org.fuxin.zcl.test.articleSearch;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +154,12 @@ public class SimpleSpiderTest {
 	}
 	
 	@Test
+	public void test33(){
+		String url = "http://www.mingyihui.net/hospital_442.html";
+		System.out.println(url.substring(url.lastIndexOf("_")+1, url.lastIndexOf(".")));
+	}
+	
+	@Test
 	public void test3() throws Exception{
 		String originUrl = "http://www.mingyihui.net";
 		String url_1 = originUrl+"/zhejiangsheng_hospital.html";
@@ -177,6 +185,7 @@ public class SimpleSpiderTest {
 		for(Element element:elements){
 			String hospitalName = element.select("h3").text();
 			String hosptialDetailUrl = originUrl + element.select("h3 a").attr("href");
+			String rank = element.select("div.H_no").text().replace("NO.", "");
 			String hospitalTag = element.select("span[class=ispublic]").eachText().stream().collect(Collectors.joining(","));
 			String hospitalIntro = element.select("dl dd").get(0).text();
 			String hospitalAddress = element.select("dl dd").get(1).text();
@@ -184,14 +193,14 @@ public class SimpleSpiderTest {
 			String hospitalSatisfied = element.select("li span[class=starwz]").text();
 			String hospitalMajor = element.select("div[class=dd_div]").eachText().stream().collect(Collectors.joining(","));
 			list.add(hosptialDetailUrl);
-			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor+" >>> "+hosptialDetailUrl);
+			System.out.println(hospitalName +" >>> " +hospitalTag + " >>> " +hospitalIntro+ " >>> "+hospitalAddress+" >>> " +hospitalPraise + " >>> " +hospitalSatisfied+ " >>> "+hospitalMajor+" >>> "+hosptialDetailUrl+">>>>"+rank);
 		}
-		//详情
+		/*//详情
 		for(String innerUrl :list){
 			Document innerDoucments = Jsoup.connect(innerUrl).get();
 			Elements innerElements = innerDoucments.select("ul[class=H_main] li[class=H_list]");
 			
-		}
+		}*/
 		
 	}
 	
@@ -205,7 +214,9 @@ public class SimpleSpiderTest {
 		List<String> list = new ArrayList<>();
 		for(Element element:elements){
 			String hospitalName = element.select("h3").text();
-			String hosptialDetailUrl = originUrl + element.select("h3 a").attr("href").replace(".", "/departments.");
+			System.out.println("href >>>> "+element.select("h3 a").attr("href"));
+//			String hosptialDetailUrl = originUrl + element.select("h3 a").attr("href").replace(".", "/departments.");
+			String hosptialDetailUrl = originUrl +"/guahao"+ element.select("h3 a").attr("href").replace(".html", "/");
 			String hospitalTag = element.select("span[class=ispublic]").eachText().stream().collect(Collectors.joining(","));
 			String hospitalIntro = element.select("dl dd").get(0).text();
 			String hospitalAddress = element.select("dl dd").get(1).text();
@@ -217,10 +228,11 @@ public class SimpleSpiderTest {
 		}
 		
 		System.out.println("******************医院科室信息******************");
-		List<String> doctorUrls = new ArrayList<>();
+		System.out.println(list);
+		/*List<String> doctorUrls = new ArrayList<>();
 		//医院科室详情
 		for(String innerUrl :list){
-//			System.out.println("innerUrl >>>"+innerUrl);
+			System.out.println("innerUrl >>>"+innerUrl);
 			Document innerDoucments = Jsoup.connect(innerUrl).get();
 			Elements innerElements = innerDoucments.select("div.classify_list.clearfix");
 			for(Element ele1 :innerElements){
@@ -237,15 +249,15 @@ public class SimpleSpiderTest {
 					String peopleNum = ele2.select("span.color_999").text();
 					peopleNum = peopleNum.substring(0, peopleNum.length());
 					doctorUrls.add(doctorUrl);
-//					System.out.println("department_1>>> "+department_1+"department_2>>> "+department_2+" ,hospitalId>>> "+hospitalId+" ,departmentId>>> "+departmentId+ " , "+peopleNum);
+					System.out.println("department_1>>> "+department_1+"department_2>>> "+department_2+" ,hospitalId>>> "+hospitalId+" ,departmentId>>> "+departmentId+ " , "+peopleNum);
 				}
 			}
 		}
-//		System.out.println("doctorUrls>>> "+doctorUrls);
+		System.out.println("doctorUrls>>> "+doctorUrls);
 		//准备抓取医生数据了
 		List<String> doctorUrlNew = new ArrayList<>();
 		for(String doctorUrl:doctorUrls){
-//			System.out.println("doctorUrl >>>"+doctorUrl);
+			System.out.println("doctorUrl >>>"+doctorUrl);
 			Document doc = Jsoup.connect(doctorUrl).get();
 			// 注意配合分页数据url的问题
 			Elements eles = doc.select("div.H_tra.w1200 a");
@@ -258,7 +270,7 @@ public class SimpleSpiderTest {
 					int beginIndex = href.lastIndexOf("_pn");
 					int endIndex = href.lastIndexOf(".");
 					pages = Integer.valueOf(href.substring(beginIndex+3, endIndex));
-//					System.out.println("pages >>>> "+pages);
+					System.out.println("pages >>>> "+pages);
 					break;
 				}
 			}
@@ -267,12 +279,158 @@ public class SimpleSpiderTest {
 				doctorUrlNew.add(doctorUrl.replace(".html", "_pn"+i+".html"));
 			}
 		}
-		System.out.println("doctorUrlNew >>> "+doctorUrlNew);
-		for(String realUrl: doctorUrlNew){
+		System.out.println("doctorUrlNew >>> "+doctorUrlNew);*/
+		/*for(String realUrl: doctorUrlNew){
 			Document doc = Jsoup.connect(realUrl).get();
 			
-		}
+		}*/
+	}
+	
+	@Test
+	public void test10(){
+		String str = "http://www.mingyihui.net/guahao/hospital_391/2_23339.html";
+		String part1 = str.substring(0,str.lastIndexOf("/"));
+		String part2 = str.substring(str.lastIndexOf("/")+1);
+		System.out.println(part1);
+		System.out.println(part2);
 		
+		Integer hospitalId = Integer.valueOf(part1.substring(part1.lastIndexOf("_")+1));
+		System.out.println(hospitalId);
+		
+		Integer parentDepartmentId = Integer.valueOf(part2.substring(0,part2.lastIndexOf("_")));
+		System.out.println(parentDepartmentId);
+		
+		Integer departmentId = Integer.valueOf(part2.substring(part2.lastIndexOf("_")+1,part2.lastIndexOf(".")));
+		System.out.println(departmentId);
+		
+		System.out.println(hospitalId+" >>> "+parentDepartmentId+" >>> "+departmentId);
+	}
+	
+	/**
+	 * 准备获取 医生的信息 URL
+	 * @throws Exception
+	 */
+	@Test
+	public void test12() throws Exception{
+		List<String> urls = new ArrayList<>();
+		urls.add("http://www.mingyihui.net/guahao/hospital_391/5_6_pn1.html");
+		for(String url:urls){
+			Document doc = Jsoup.connect(url).get();
+			Elements eles = doc.select("div.H_doc_con > ul > li");
+			for(Element ele :eles){
+				String href = ele.select("a").get(0).absUrl("href");
+				String titles = ele.select("span.fl.doctor_titles").text();
+				Integer rank = Integer.valueOf(ele.select("a > div").text().replace("NO.", ""));  //body > div.H-phone.w1200 > div.w1200.H_doc > div.H_doc_con > ul > li:nth-child(1) > a > div
+			    System.out.println(href+" >>> "+titles+" >>> "+rank);
+			}
+			
+		}
+	}
+	
+	/**
+	 * 准备医生信息的拉取  FIXME
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void test11() throws Exception{// body > div.H-phone.w1200 > div.H_tra.w1200 > ul > li:nth-child(5) > a
+		List<String> urls = new ArrayList<>();
+		urls.add("http://www.mingyihui.net/guahao/hospital_391/5_6.html");// http://www.mingyihui.net/guahao/hospital_391/5_6_pn2.html
+		urls.add("http://www.mingyihui.net/guahao/hospital_391/5_71.html");
+		for(String url:urls){
+			Document doc = Jsoup.connect(url).get();
+			int pages = 1;
+			Elements eles = doc.select("div.H_tra.w1200 a");
+			Collections.reverse(eles);
+			for(Element e :eles){
+		        if("末页".equals(e.text())){
+		            String href = e.attr("href");
+		            int beginIndex = href.lastIndexOf("_");
+		            int endIndex = href.lastIndexOf(".");
+		            pages = Integer.valueOf(href.substring(beginIndex+3, endIndex));
+		            break;
+		        }
+		    }
+			System.out.println("pages >>> "+pages);
+			for(int i = 1;i<=pages;i++){
+			     System.out.println(url.replace(".html", "_pn"+i+".html")); 
+			}
+			
+		}
+	}
+	
+	@Test
+	public void test13(){
+		Date abc  = new Date();
+		abc.setTime(1531476394762L);
+		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(abc));
+	}
+	
+	/**
+	 * 新的二级科室信息拉取  FIXME
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void test9() throws Exception{
+		List<String> urls = new ArrayList<>();
+		urls.add("http://www.mingyihui.net/guahao/hospital_391/2.html");
+		for(String url:urls){
+			Document doc = Jsoup.connect(url).get();
+			Elements elements = doc.select("div.illness_classify.border > div:nth-child(3) > ul > li:not(:first-child)");
+			for(Element ele :elements){
+				String href = ele.select("a").attr("href");
+				if(StringUtils.isEmpty(ele.select("a").text())){
+					continue;
+				}
+				System.out.println("href >>> "+href);
+				String part1 = href.substring(0,href.lastIndexOf("/"));
+				String part2 = href.substring(href.lastIndexOf("/")+1);
+				//http://www.mingyihui.net/guahao/hospital_391/2_23339.html
+				Integer hospitalId = Integer.valueOf(part1.substring(part1.lastIndexOf("_")+1));
+				Integer parentDepartmentId = Integer.valueOf(part2.substring(0,part2.lastIndexOf("_")));
+				Integer departmentId = Integer.valueOf(part2.substring(part2.lastIndexOf("_")+1,part2.lastIndexOf(".")));
+				System.out.println(hospitalId+" >>> "+parentDepartmentId+" >>> "+departmentId);
+				System.out.println(ele.select("a").text());
+				
+				
+				/*Integer hospitalId = Integer.valueOf(href.substring(href.lastIndexOf("_")+1, href.lastIndexOf("/")));
+				Integer departmentId = Integer.valueOf(href.substring(href.lastIndexOf("/")+1, href.lastIndexOf(".")));
+				String departmentName = ele.select("a").text();
+				System.out.println(hospitalId+" >>> "+departmentId+" >>> "+departmentName+" >>> "+href);
+				System.out.println("***********************************");*/
+			}
+			
+			System.out.println();
+		}
+	}
+	/**
+	 * 新的一级科室信息拉取
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void test8() throws Exception{
+		List<String> urls = new ArrayList<>();
+		urls.add("http://www.mingyihui.net/guahao/hospital_391/");
+//		urls.add("http://www.mingyihui.net/guahao/hospital_392/");
+		for(String url:urls){
+			Document doc = Jsoup.connect(url).get();
+			Elements elements = doc.select("div.illness_list.clearfix.H_link > ul > li:not(:first-child)");
+			for(Element ele :elements){
+				String href = ele.select("a").attr("href");
+				if(StringUtils.isEmpty(ele.select("a").text())){
+					continue;
+				}
+				Integer hospitalId = Integer.valueOf(href.substring(href.lastIndexOf("_")+1, href.lastIndexOf("/")));
+				Integer departmentId = Integer.valueOf(href.substring(href.lastIndexOf("/")+1, href.lastIndexOf(".")));
+				String departmentName = ele.select("a").text();
+				System.out.println(hospitalId+" >>> "+departmentId+" >>> "+departmentName+" >>> "+href);
+				System.out.println("***********************************");
+			}
+			
+			System.out.println();
+		}
 	}
 	
 	/**
@@ -284,24 +442,43 @@ public class SimpleSpiderTest {
 	@Test
 	public void test7() throws Exception{
 		List<String> urls = new ArrayList<>();
-		urls.add("http://www.mingyihui.net/doctor_57341.html");
-		urls.add("http://www.mingyihui.net/doctor_57357.html");
+//		urls.add("http://www.mingyihui.net/doctor_57341.html");
+//		urls.add("http://www.mingyihui.net/doctor_57357.html");
+		urls.add("http://www.mingyihui.net/doctor_892900.html");
 		for(String url:urls){
 			Document doc = Jsoup.connect(url).get();
-			String goodAt = doc.select("div.details_contant.fr > div:nth-child(2) > p").text();
+			String doctorGoodAt = doc.select("div.details_contant.fr > div:nth-child(2) > p").text();
+			System.out.println("doctorGoodAt >>>> "+doctorGoodAt);
+			Integer doctorId = Integer.valueOf(url.substring(url.lastIndexOf("_")+1, url.lastIndexOf(".")));
+			String doctorName = doc.select(" div.crumbs.w1200 > a:nth-child(4)").text();
+			String hospitalIdStr = doc.select("div.crumbs.w1200 > a:nth-child(2)").attr("href");
+			Integer hospitalId = Integer.valueOf(hospitalIdStr.substring(hospitalIdStr.lastIndexOf("_")+1, hospitalIdStr.lastIndexOf(".")));
+			String hospitalName = doc.select("div.crumbs.w1200 > a:nth-child(2)").text();
+			String departmentIdStr = doc.select("div.crumbs.w1200 > a:nth-child(3)").attr("href");
+			Integer departmentId = Integer.valueOf(departmentIdStr.substring(departmentIdStr.lastIndexOf("_")+1, departmentIdStr.lastIndexOf(".")));
+			String departmentName = doc.select("div.crumbs.w1200 > a:nth-child(3)").text();
+			System.out.println(doctorId +" > "+doctorName + " > "+hospitalId+" > "+hospitalName+" > "+departmentId + " > "+departmentName); 
+			
+		   
+			
+			
 			Elements element1 = doc.select("div.out_call > table > tbody > tr:nth-child(2) > td");
 			for(int i = 1;i<element1.size();i++){
 				System.out.println(i+" >>> "+element1.get(i).text());
+				
 			}
 			
 			Elements element2 = doc.select("div.out_call > table > tbody > tr:nth-child(3) > td");
 			for(int i = 1;i<element2.size();i++){
 				System.out.println(i+" >>> "+element2.get(i).text());
 			}
+			
 			Elements element3 = doc.select("div.out_call > table > tbody > tr:nth-child(4) > td");
 			for(int i = 1;i<element3.size();i++){
 				System.out.println(i+" >>> "+element3.get(i).text());
 			}
+			
+			
 			
 			System.out.println();
 		}
