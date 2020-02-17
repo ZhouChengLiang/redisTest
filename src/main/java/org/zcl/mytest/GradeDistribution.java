@@ -62,14 +62,5 @@ public class GradeDistribution {
 		this.countyCode = countyCode;
 	}
 
-	public GradeDistribution(String curdate, Integer curgrade, Integer curexp, Integer curusers, Integer countyCode) {
-		super();
-		this.curdate = curdate;
-		this.curgrade = curgrade;
-		this.curexp = curexp;
-		this.curusers = curusers;
-		this.countyCode = countyCode;
-	}
-    
 
 }

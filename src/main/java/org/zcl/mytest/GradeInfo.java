@@ -117,18 +117,4 @@ public class GradeInfo {
 		this.countyCode = countyCode;
 	}
 
-	public GradeInfo(Integer id, Integer grade, Integer requiredExperience, Integer totalSumExperience,
-			String gradeName, String gradeIcon, Integer currentUsers, Integer countyCode) {
-		super();
-		this.id = id;
-		this.grade = grade;
-		this.requiredExperience = requiredExperience;
-		this.totalSumExperience = totalSumExperience;
-		this.gradeName = gradeName;
-		this.gradeIcon = gradeIcon;
-		this.currentUsers = currentUsers;
-		this.countyCode = countyCode;
-	}
-    
-	public GradeInfo(){}
 }

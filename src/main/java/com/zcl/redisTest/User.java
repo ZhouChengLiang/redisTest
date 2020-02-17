@@ -1,35 +1,22 @@
 package com.zcl.redisTest;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@ToString
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-	private int age;
+    private String id;
+    private Integer status;
+	private Integer age;
 	private String name;
+	private String hobby;
 	
-	public User(){
-		
+	public User(Integer age,String name) {
+	    this.age = age;
+	    this.name = name;
 	}
-	public User(int age,String name){
-		this.age = age;
-		this.name = name;
-	}
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	
 }

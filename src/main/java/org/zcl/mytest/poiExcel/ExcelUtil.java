@@ -125,7 +125,7 @@ public class ExcelUtil {
         case Cell.CELL_TYPE_STRING:  
             value = cell.getRichStringCellValue().getString();  
             break;  
-        case Cell.CELL_TYPE_NUMERIC:  
+        case Cell.CELL_TYPE_NUMERIC: 
             if("General".equals(cell.getCellStyle().getDataFormatString())){  
                 value = df.format(cell.getNumericCellValue());  
             }else if("m/d/yy".equals(cell.getCellStyle().getDataFormatString())){  
